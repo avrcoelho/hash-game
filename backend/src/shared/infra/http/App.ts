@@ -5,6 +5,7 @@ import 'express-async-errors';
 import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
 import { errors } from 'celebrate';
+import io, { Server } from 'socket.io';
 
 import AppError from '@shared/errors/AppError';
 import routes from './routes';
@@ -14,13 +15,31 @@ import '@shared/container';
 
 class App {
   public server: Application;
+  private io: Server;
+  private connectedUsers: { [index: string]: any } = {};
 
   public constructor() {
     this.server = express();
 
+    this.socket();
     this.middlewares();
     this.routes();
     this.errors();
+  }
+
+  private socket(): void {
+    this.io = io(this.server);
+
+    // escuta os eventos que estão rolando dentro do io
+    this.io.on('connection', socket => {
+      const { code } = socket.handshake.query;
+
+      this.connectedUsers[code] = socket.id;
+
+      socket.on('disconnect', () => {
+        delete this.connectedUsers[code];
+      });
+    });
   }
 
   private middlewares() {
@@ -31,6 +50,15 @@ class App {
     );
     this.server.use(express.json());
     this.server.use(errors());
+
+    this.server.use(
+      (request: Request, response: Response, next: NextFunction) => {
+        request.io = this.io;
+        request.connectedUsers = this.connectedUsers;
+
+        next();
+      },
+    );
   }
 
   private routes() {
