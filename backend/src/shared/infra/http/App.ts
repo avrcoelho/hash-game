@@ -6,6 +6,7 @@ import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import io, { Server } from 'socket.io';
+import http from 'http';
 
 import AppError from '@shared/errors/AppError';
 import routes from './routes';
@@ -14,12 +15,14 @@ import '@shared/infra/typeorm';
 import '@shared/container';
 
 class App {
-  public server: Application;
+  public server: http.Server;
+  public app: Application;
   private io: Server;
   private connectedUsers: { [index: string]: any } = {};
 
   public constructor() {
-    this.server = express();
+    this.app = express();
+    this.server = new http.Server(this.app);
 
     this.socket();
     this.middlewares();
@@ -43,30 +46,28 @@ class App {
   }
 
   private middlewares() {
-    this.server.use(
+    this.app.use(
       cors({
         origin: 'http://localhost:3000',
       }),
     );
-    this.server.use(express.json());
-    this.server.use(errors());
+    this.app.use(express.json());
 
-    this.server.use(
-      (request: Request, response: Response, next: NextFunction) => {
-        request.io = this.io;
-        request.connectedUsers = this.connectedUsers;
+    this.app.use((request: Request, response: Response, next: NextFunction) => {
+      request.io = this.io;
+      request.connectedUsers = this.connectedUsers;
 
-        next();
-      },
-    );
+      next();
+    });
   }
 
   private routes() {
-    this.server.use(routes);
+    this.app.use(routes);
   }
 
   private errors() {
-    this.server.use(
+    this.app.use(errors());
+    this.app.use(
       (error: Error, request: Request, response: Response, _: NextFunction) => {
         if (error instanceof AppError) {
           return response.status(error.statusCode).json({

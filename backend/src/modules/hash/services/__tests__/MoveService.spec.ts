@@ -1,15 +1,15 @@
 import FakeHashRepository from '@modules/hash/repositories/fakes/FakeHashRepository';
-import MakePlayService from '../MakePlayService';
+import MoveService from '../MoveService';
 import AppError from '../../../../shared/errors/AppError';
 
 let fakeHashRepository: FakeHashRepository;
-let makePlayService: MakePlayService;
+let moveService: MoveService;
 
-describe('MakePlayService', () => {
+describe('MoveService', () => {
   beforeEach(() => {
     fakeHashRepository = new FakeHashRepository();
 
-    makePlayService = new MakePlayService(fakeHashRepository);
+    moveService = new MoveService(fakeHashRepository);
   });
 
   it('should be able don´t find hash', async () => {
@@ -23,7 +23,7 @@ describe('MakePlayService', () => {
     });
 
     await expect(
-      makePlayService.execute({
+      moveService.execute({
         id: 'invalid',
         player: 'Tester 2',
         position: 1,
@@ -42,7 +42,7 @@ describe('MakePlayService', () => {
       player_2: 'Tester 2',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
@@ -50,7 +50,7 @@ describe('MakePlayService', () => {
     });
 
     await expect(
-      makePlayService.execute({
+      moveService.execute({
         id: String(hash.id),
         player: 'Tester 2',
         position: 3,
@@ -59,7 +59,7 @@ describe('MakePlayService', () => {
     ).rejects.toBeInstanceOf(AppError);
 
     await expect(
-      makePlayService.execute({
+      moveService.execute({
         id: String(hash.id),
         player: 'Tester',
         position: 2,
@@ -78,7 +78,7 @@ describe('MakePlayService', () => {
       player_2: 'Tester 2',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
@@ -106,35 +106,35 @@ describe('MakePlayService', () => {
       player_2: 'Tester 2',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
       type: 'o',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 4,
       type: 'x',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 2,
       type: 'o',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 5,
       type: 'x',
     });
 
-    const hasWinner = await makePlayService.execute({
+    const hasWinner = await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 3,
@@ -155,35 +155,35 @@ describe('MakePlayService', () => {
       player_2: 'Tester 2',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
       type: 'o',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 4,
       type: 'x',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 5,
       type: 'o',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 7,
       type: 'x',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 9,
@@ -191,7 +191,7 @@ describe('MakePlayService', () => {
     });
 
     await expect(
-      makePlayService.execute({
+      moveService.execute({
         id: String(hash.id),
         player: 'Tester',
         position: 2,
@@ -210,14 +210,14 @@ describe('MakePlayService', () => {
       player_2: 'Tester 2',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
       type: 'o',
     });
 
-    await makePlayService.execute({
+    await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 2,
@@ -225,7 +225,7 @@ describe('MakePlayService', () => {
     });
 
     await expect(
-      makePlayService.execute({
+      moveService.execute({
         id: String(hash.id),
         player: 'Tester 2',
         position: 1,

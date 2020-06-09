@@ -12,7 +12,7 @@ interface IRequest {
 }
 
 @injectable()
-class MakePlayService {
+class MoveService {
   constructor(
     @inject('hashRepository')
     private hahsRepository: IHashRepository,
@@ -93,4 +93,4 @@ class MakePlayService {
   }
 }
 
-export default MakePlayService;
+export default MoveService;
