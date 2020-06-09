@@ -10,9 +10,11 @@ class MoveController {
     const { player, position, type } = request.body;
     const { id } = request.params;
 
-    const move = await moveService.execute({ id, player, position, type });
+    const hash = await moveService.execute({ id, player, position, type });
 
-    return response.json(move);
+    request.io.to(id).emit('hashUpdated', hash);
+
+    return response.json(hash);
   }
 }
 

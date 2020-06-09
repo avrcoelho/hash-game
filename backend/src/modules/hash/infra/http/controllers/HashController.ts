@@ -35,6 +35,8 @@ class HashController {
 
     const hash = await insertPlay2Service.execute({ id, player_2 });
 
+    request.io.to(id).emit('player2Entered', hash);
+
     return response.json(hash);
   }
 }
