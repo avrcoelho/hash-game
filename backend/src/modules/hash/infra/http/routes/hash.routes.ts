@@ -9,10 +9,10 @@ const hashRouter = Router();
 const hashController = new HashController();
 
 hashRouter.post('/', validationStore, hashController.store);
+hashRouter.patch('/:id', validationUpdate, hashController.update);
 
 hashRouter.use(ensureAuthenticated);
 
 hashRouter.get('/:id', hashController.show);
-hashRouter.patch('/:id', validationUpdate, hashController.update);
 
 export default hashRouter;

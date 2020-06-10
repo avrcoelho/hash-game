@@ -9,9 +9,9 @@ import io, { Server } from 'socket.io';
 import http from 'http';
 
 import AppError from '@shared/errors/AppError';
+import createConnection from '@shared/infra/typeorm';
 import routes from './routes';
 
-import '@shared/infra/typeorm';
 import '@shared/container';
 
 class App {
@@ -21,16 +21,18 @@ class App {
   private connectedUsers: { [index: string]: any } = {};
 
   public constructor() {
+    createConnection();
+
     this.app = express();
     this.server = new http.Server(this.app);
 
-    this.socket();
+    this.socketio();
     this.middlewares();
     this.routes();
     this.errors();
   }
 
-  private socket(): void {
+  private socketio(): void {
     this.io = io(this.server);
 
     // escuta os eventos que estão rolando dentro do io

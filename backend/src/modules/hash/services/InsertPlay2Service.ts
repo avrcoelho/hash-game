@@ -19,7 +19,7 @@ interface IResponse {
 @injectable()
 class InsertPlay2Service {
   constructor(
-    @inject('hashRepository')
+    @inject('HashRepository')
     private hahsRepository: IHashRepository,
   ) {}
 

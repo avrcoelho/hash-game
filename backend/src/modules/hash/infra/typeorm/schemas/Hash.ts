@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity('Hash')
-class Notifications {
+class Hash {
   @ObjectIdColumn()
   id: ObjectID;
 
@@ -40,4 +40,4 @@ class Notifications {
   updated_at: Date;
 }
 
-export default Notifications;
+export default Hash;

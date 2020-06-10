@@ -9,7 +9,7 @@ class HashRespository implements IHashRepository {
   private ormRepository: MongoRepository<Hash>;
 
   constructor() {
-    this.ormRepository = getMongoRepository(Hash, 'mongo');
+    this.ormRepository = getMongoRepository(Hash);
   }
 
   public async create({ player_1 }: ICreateHashDTO): Promise<Hash> {

@@ -14,7 +14,7 @@ interface IRequest {
 @injectable()
 class MoveService {
   constructor(
-    @inject('hashRepository')
+    @inject('HashRepository')
     private hahsRepository: IHashRepository,
   ) {}
 

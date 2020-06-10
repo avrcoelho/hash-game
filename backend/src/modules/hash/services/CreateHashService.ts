@@ -17,7 +17,7 @@ interface IResponse {
 @injectable()
 class CreateHashService {
   constructor(
-    @inject('hashRepository')
+    @inject('HashRepository')
     private hahsRepository: IHashRepository,
   ) {}
 
