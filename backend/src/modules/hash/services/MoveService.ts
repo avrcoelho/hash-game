@@ -93,7 +93,7 @@ class MoveService {
       hash.winningMode = isWinner;
     }
 
-    return this.hahsRepository.save(hash);
+    return await this.hahsRepository.save(hash);
   }
 }
 

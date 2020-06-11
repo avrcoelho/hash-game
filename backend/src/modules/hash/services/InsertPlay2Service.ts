@@ -34,6 +34,10 @@ class InsertPlay2Service {
       throw new AppError('Game don´t available');
     }
 
+    if (hash.player_1 === player_2) {
+      throw new AppError('Name don´t available');
+    }
+
     hash.player_2 = player_2;
 
     hash = await this.hahsRepository.save(hash);

@@ -51,13 +51,13 @@ describe('initGame', () => {
     });
 
     const { body } = await request(app.server).patch(`/hash/${hash.id}`).send({
-      player_2: 'Tester',
+      player_2: 'Tester 2',
     });
 
     expect(body).toHaveProperty('hash');
     expect(body).toHaveProperty('token');
     expect(body.hash).toHaveProperty('player_2');
-    expect(body.hash.player_2).toBe('Tester');
+    expect(body.hash.player_2).toBe('Tester 2');
   });
 
   it('should be able to invalid body when insert player 2', async () => {

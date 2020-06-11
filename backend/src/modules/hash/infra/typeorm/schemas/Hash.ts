@@ -19,13 +19,11 @@ class Hash {
   player_2: string;
 
   @Column()
-  game: [
-    {
-      player: string;
-      position: number;
-      type: 'x' | 'o';
-    },
-  ];
+  game: Array<{
+    player: string;
+    position: number;
+    type: 'x' | 'o';
+  }> = [];
 
   @Column()
   winner: string;

@@ -39,7 +39,7 @@ describe('InsertPlay2Service', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should be able to game don[t available', async () => {
+  it('should be able to game don´t available', async () => {
     let hash = await createHashService.execute({
       player_1: 'Tester',
     });
@@ -53,6 +53,19 @@ describe('InsertPlay2Service', () => {
       insertPlay2Service.execute({
         id: String(hash.hash.id),
         player_2: 'Tester 2',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to name don´t available ', async () => {
+    let hash = await createHashService.execute({
+      player_1: 'Tester',
+    });
+
+    await expect(
+      insertPlay2Service.execute({
+        id: String(hash.hash.id),
+        player_2: 'Tester',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

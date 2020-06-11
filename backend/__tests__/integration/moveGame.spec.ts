@@ -29,11 +29,11 @@ describe('moveGame', () => {
     });
 
     await request(app.server).patch(`/hash/${hash.id}`).send({
-      player_2: 'Tester',
+      player_2: 'Tester 2',
     });
 
     const { body } = await request(app.server)
-      .post(`/hash/${hash.id}`)
+      .post(`/move/${hash.id}`)
       .send({
         position: 1,
       })
