@@ -21,21 +21,21 @@ class MoveService {
     const hash = await this.hahsRepository.findById(id);
 
     if (!hash) {
-      throw new AppError('Hash not found');
+      throw new AppError('Jogo não encontrado');
     }
 
     if (hash.winner) {
-      throw new AppError('Hash don´t available');
+      throw new AppError('Jogo não disponível');
     }
 
     if (!hash.player_2) {
-      throw new AppError('Don´t have player 2');
+      throw new AppError('Não possui jogador 2');
     }
 
     const occupiedPosition = hash.game.find(game => game.position === position);
 
     if (occupiedPosition) {
-      throw new AppError('Occupied position');
+      throw new AppError('Posição já esta ocupada');
     }
 
     let type: 'x' | 'o' = 'x';
@@ -47,7 +47,7 @@ class MoveService {
     const lastMove = hash.game[hash.game.length - 1];
 
     if (lastMove && (lastMove.player === player || lastMove.type === type)) {
-      throw new AppError('play not allowed');
+      throw new AppError('Jogada não permitida');
     }
 
     hash.game.push({ player, position, type });

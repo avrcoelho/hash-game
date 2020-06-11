@@ -26,7 +26,7 @@ class ShowHashService {
     const hash = await this.hashRepository.findById(hash_id);
 
     if (!hash) {
-      throw new AppError('Hash not found');
+      throw new AppError('Jogo não encontrado');
     }
 
     let playerInit = false;

@@ -88,7 +88,7 @@ describe('initGame', () => {
       });
 
     expect(status).toBe(400);
-    expect(body.message).toBe('Hash not found');
+    expect(body.message).toBe('Jogo não encontrado');
   });
 
   it('should be able to game not available', async () => {
@@ -109,6 +109,6 @@ describe('initGame', () => {
       });
 
     expect(status).toBe(400);
-    expect(body.message).toBe('Game don´t available');
+    expect(body.message).toBe('Jogo não disponível');
   });
 });

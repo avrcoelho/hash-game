@@ -63,6 +63,6 @@ describe('showGame', () => {
       .set('Authorization', `bearer ${token}`);
 
     expect(status).toBe(400);
-    expect(body.message).toBe('Hash not found');
+    expect(body.message).toBe('Jogo não encontrado');
   });
 });
