@@ -27,7 +27,20 @@ describe('MoveService', () => {
         id: 'invalid',
         player: 'Tester 2',
         position: 1,
-        type: 'o',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able don´t have player 2', async () => {
+    const hash = await fakeHashRepository.create({
+      player_1: 'Tester',
+    });
+
+    await expect(
+      moveService.execute({
+        id: String(hash.id),
+        player: 'Tester',
+        position: 1,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -46,7 +59,6 @@ describe('MoveService', () => {
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
-      type: 'o',
     });
 
     await expect(
@@ -54,16 +66,6 @@ describe('MoveService', () => {
         id: String(hash.id),
         player: 'Tester 2',
         position: 3,
-        type: 'o',
-      }),
-    ).rejects.toBeInstanceOf(AppError);
-
-    await expect(
-      moveService.execute({
-        id: String(hash.id),
-        player: 'Tester',
-        position: 2,
-        type: 'o',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -82,7 +84,6 @@ describe('MoveService', () => {
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
-      type: 'o',
     });
 
     expect(hash.game).toEqual(
@@ -110,35 +111,30 @@ describe('MoveService', () => {
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
-      type: 'o',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 4,
-      type: 'x',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 2,
-      type: 'o',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 5,
-      type: 'x',
     });
 
     const hasWinner = await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 3,
-      type: 'o',
     });
 
     expect(hasWinner.winner).toBe('Tester 2');
@@ -159,35 +155,30 @@ describe('MoveService', () => {
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
-      type: 'o',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 4,
-      type: 'x',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 5,
-      type: 'o',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 7,
-      type: 'x',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester 2',
       position: 9,
-      type: 'o',
     });
 
     await expect(
@@ -195,7 +186,6 @@ describe('MoveService', () => {
         id: String(hash.id),
         player: 'Tester',
         position: 2,
-        type: 'x',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -214,14 +204,12 @@ describe('MoveService', () => {
       id: String(hash.id),
       player: 'Tester 2',
       position: 1,
-      type: 'o',
     });
 
     await moveService.execute({
       id: String(hash.id),
       player: 'Tester',
       position: 2,
-      type: 'x',
     });
 
     await expect(
@@ -229,7 +217,6 @@ describe('MoveService', () => {
         id: String(hash.id),
         player: 'Tester 2',
         position: 1,
-        type: 'o',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

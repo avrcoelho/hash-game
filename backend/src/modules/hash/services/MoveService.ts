@@ -8,7 +8,6 @@ interface IRequest {
   id: string;
   player: string;
   position: number;
-  type: 'x' | 'o';
 }
 
 @injectable()
@@ -18,26 +17,31 @@ class MoveService {
     private hahsRepository: IHashRepository,
   ) {}
 
-  public async execute({
-    id,
-    player,
-    position,
-    type,
-  }: IRequest): Promise<Hash> {
+  public async execute({ id, player, position }: IRequest): Promise<Hash> {
     const hash = await this.hahsRepository.findById(id);
 
     if (!hash) {
-      throw new AppError('Hash don´t found');
+      throw new AppError('Hash not found');
     }
 
     if (hash.winner) {
       throw new AppError('Hash don´t available');
     }
 
+    if (!hash.player_2) {
+      throw new AppError('Don´t have player 2');
+    }
+
     const occupiedPosition = hash.game.find(game => game.position === position);
 
     if (occupiedPosition) {
       throw new AppError('Occupied position');
+    }
+
+    let type: 'x' | 'o' = 'x';
+
+    if (player === hash.player_2) {
+      type = 'o';
     }
 
     const lastMove = hash.game[hash.game.length - 1];

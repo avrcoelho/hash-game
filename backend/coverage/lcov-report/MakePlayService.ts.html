@@ -278,7 +278,7 @@ class MakePlayService {
     const hash = await this.hahsRepository.findById(id);
 &nbsp;
     if (!hash) {
-      throw new AppError('Hash don´t found');
+      throw new AppError('Hash not found');
     }
 &nbsp;
     if (hash.winner) {

@@ -30,10 +30,28 @@ describe('InsertPlay2Service', () => {
     expect(hash.hash.player_2).toBe('Tester 2');
   });
 
-  it('should be able to insert player 2', async () => {
+  it('should be able to invalid id', async () => {
     await expect(
       insertPlay2Service.execute({
         id: 'invalid',
+        player_2: 'Tester 2',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to game don[t available', async () => {
+    let hash = await createHashService.execute({
+      player_1: 'Tester',
+    });
+
+    hash = await insertPlay2Service.execute({
+      id: String(hash.hash.id),
+      player_2: 'Tester 2',
+    });
+
+    await expect(
+      insertPlay2Service.execute({
+        id: String(hash.hash.id),
         player_2: 'Tester 2',
       }),
     ).rejects.toBeInstanceOf(AppError);

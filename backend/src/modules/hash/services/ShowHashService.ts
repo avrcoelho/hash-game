@@ -11,6 +11,8 @@ interface IRequest {
 
 interface IResponse extends Hash {
   you: string;
+  playerInit: boolean;
+  nextPlayer: boolean;
 }
 
 @injectable()
@@ -27,7 +29,22 @@ class ShowHashService {
       throw new AppError('Hash not found');
     }
 
-    return { ...hash, you: player };
+    let playerInit = false;
+    let nextPlayer = true;
+
+    if (hash.player_1 === player && (!hash.game || !hash.game.length)) {
+      playerInit = true;
+    }
+
+    if (hash.game && hash.game.length) {
+      const lastMove = hash.game[hash.game.length - 1];
+
+      if (lastMove.player === player) {
+        nextPlayer = false;
+      }
+    }
+
+    return { ...hash, playerInit, nextPlayer, you: player };
   }
 }
 

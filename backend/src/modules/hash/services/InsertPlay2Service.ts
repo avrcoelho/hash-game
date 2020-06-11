@@ -27,7 +27,11 @@ class InsertPlay2Service {
     let hash = await this.hahsRepository.findById(id);
 
     if (!hash) {
-      throw new AppError('Hash don´t found');
+      throw new AppError('Hash not found');
+    }
+
+    if (hash.player_2) {
+      throw new AppError('Game don´t available');
     }
 
     hash.player_2 = player_2;

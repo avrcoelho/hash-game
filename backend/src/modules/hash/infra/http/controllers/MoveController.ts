@@ -7,14 +7,15 @@ class MoveController {
   public async store(request: Request, response: Response) {
     const moveService = container.resolve(MoveService);
 
-    const { player, position, type } = request.body;
+    const { position } = request.body;
     const { id } = request.params;
+    const { player } = request;
 
-    const hash = await moveService.execute({ id, player, position, type });
+    const hash = await moveService.execute({ id, player, position });
 
-    request.io.to(id).emit('hashUpdated', hash);
+    request.io.to(id).emit('hashUpdated', { ...hash, nextPlayer: true });
 
-    return response.json(hash);
+    return response.json({ ...hash, nextPlayer: false });
   }
 }
 

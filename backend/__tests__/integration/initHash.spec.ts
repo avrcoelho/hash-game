@@ -1,7 +1,6 @@
 import request from 'supertest';
-import { Connection, getConnection, getMongoRepository } from 'typeorm';
+import { Connection, getConnection } from 'typeorm';
 
-import Hash from '@modules/hash/infra/typeorm/schemas/Hash';
 import App from '@shared/infra/http/App';
 import createConnection from '@shared/infra/typeorm';
 
@@ -12,8 +11,7 @@ describe('initGame', () => {
   beforeAll(async () => {
     connection = await createConnection('test-connection');
 
-    const hashRepository = getMongoRepository(Hash);
-    hashRepository.deleteMany({});
+    await connection.getMongoRepository('Hash').deleteMany({});
   });
 
   afterAll(async () => {
@@ -37,6 +35,12 @@ describe('initGame', () => {
     const response = await request(app.server).post('/hash').send();
 
     expect(response.status).toBe(400);
+  });
+
+  it('should be able to invalid body when init game', async () => {
+    const { status } = await request(app.server).post(`/hash`).send();
+
+    expect(status).toBe(400);
   });
 
   it('should be able to insert player 2', async () => {
@@ -68,5 +72,43 @@ describe('initGame', () => {
       .send();
 
     expect(status).toBe(400);
+  });
+
+  it('should be able to invalid id', async () => {
+    const {
+      body: { hash },
+    } = await request(app.server).post('/hash').send({
+      player_1: 'Tester',
+    });
+
+    const { status, body } = await request(app.server)
+      .patch(`/hash/${hash.id.substr(1)}1`)
+      .send({
+        player_2: 'Tester 2',
+      });
+
+    expect(status).toBe(400);
+    expect(body.message).toBe('Hash not found');
+  });
+
+  it('should be able to game not available', async () => {
+    const {
+      body: { hash },
+    } = await request(app.server).post('/hash').send({
+      player_1: 'Tester',
+    });
+
+    await request(app.server).patch(`/hash/${hash.id}`).send({
+      player_2: 'Tester 2',
+    });
+
+    const { status, body } = await request(app.server)
+      .patch(`/hash/${hash.id}`)
+      .send({
+        player_2: 'Tester 2',
+      });
+
+    expect(status).toBe(400);
+    expect(body.message).toBe('Game don´t available');
   });
 });
