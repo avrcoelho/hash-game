@@ -9,7 +9,7 @@ let connection: Connection;
 
 describe('initGame', () => {
   beforeAll(async () => {
-    connection = await createConnection('test-connection');
+    connection = await createConnection();
 
     await connection.getMongoRepository('Hash').deleteMany({});
   });
