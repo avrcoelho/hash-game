@@ -43,6 +43,7 @@ export const Container = styled.View<ContainerProps>`
 
 export const TextInput = styled.TextInput`
   flex: 1;
+  height: 100%;
   color: #fff;
   font-size: 16px;
   padding-left: 8px;
