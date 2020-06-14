@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "^7.10.2",
     "@unform/core": "^2.1.0",
     "@unform/mobile": "^2.1.0",
     "axios": "^0.19.2",
@@ -20,13 +21,17 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-app-rewired test",
+    "test": "jest",
     "coverage": "react-app-rewired test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "transformIgnorePatterns": [
+    "node_modules/(?!(jest-)?react-native)",
+    "node_modules/?!(react-navigation)"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,8 +45,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/preset-flow": "^7.10.1",
+    "@babel/preset-react": "^7.10.1",
     "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/jest-native": "^3.1.0",
     "@testing-library/react": "^9.3.2",
+    "@testing-library/react-native": "^5.0.3",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
@@ -64,18 +74,21 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "prettier": "^2.0.5",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.1.6",
+    "react-native-testing-library": "^2.1.0",
+    "react-test-renderer": "^16.13.1"
   },
   "jest": {
+    "preset": "@testing-library/react-native",
+    "setupFilesAfterEnv": [
+      "@testing-library/react-native/jest-preset"
+    ],
     "testMatch": [
       "**/__tests__/**/*.spec{.ts,.tsx,.js}"
     ],
     "moduleNameMapper": {
       "^~/(.*)": "<rootDir>/src/$1"
     },
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ],
     "collectCoverageFrom": [
       "!src/index.tsx",
       "!src/App.tsx",
