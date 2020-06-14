@@ -23,6 +23,8 @@ export const Container = styled.View<ContainerProps>`
     props.isErrored &&
     css`
       border-color: #c53030;
+      color: #c53030;
+      margin-bottom: 3px;
     `}
   ${props =>
     props.isFocused &&
@@ -48,4 +50,11 @@ export const TextInput = styled.TextInput`
   font-size: 16px;
   padding-left: 8px;
   color: #f4ede8;
+`;
+
+export const Error = styled.Text`
+  color: #c53030;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: bold;
 `;

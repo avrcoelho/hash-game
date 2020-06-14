@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/preset-env": "^7.10.2",
     "@unform/core": "^2.1.0",
     "@unform/mobile": "^2.1.0",
     "axios": "^0.19.2",
@@ -16,13 +15,14 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "yup": "^0.29.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "coverage": "react-app-rewired test --coverage --watchAll=false",
+    "coverage": "jest --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -45,9 +45,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/preset-flow": "^7.10.1",
-    "@babel/preset-react": "^7.10.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/jest-native": "^3.1.0",
     "@testing-library/react": "^9.3.2",
@@ -61,6 +58,7 @@
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
+    "@types/yup": "^0.29.3",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
     "babel-jest": "24.9.0",
@@ -73,10 +71,11 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
+    "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^2.0.5",
-    "react-app-rewired": "^2.1.6",
     "react-native-testing-library": "^2.1.0",
-    "react-test-renderer": "^16.13.1"
+    "react-test-renderer": "^16.13.1",
+    "ts-jest": "^26.1.0"
   },
   "jest": {
     "preset": "@testing-library/react-native",
@@ -91,10 +90,15 @@
     },
     "collectCoverageFrom": [
       "!src/index.tsx",
+      "src/**/index.tsx",
       "!src/App.tsx",
       "!src/routes/*",
       "!src/services/api.ts"
     ],
-    "coverageDirectory": "<rootDir>/src/__tests__/coverage"
+    "coverageDirectory": "<rootDir>/src/__tests__/coverage",
+    "verbose": true,
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    }
   }
 }

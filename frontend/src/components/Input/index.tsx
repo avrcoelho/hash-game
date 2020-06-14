@@ -10,7 +10,7 @@ import { TextInputProperties } from 'react-native';
 import { useField } from '@unform/core';
 import { IconBaseProps } from 'react-icons';
 
-import { Container, TextInput } from './styles';
+import { Container, TextInput, Error } from './styles';
 
 interface InputProps extends TextInputProperties {
   name: string;
@@ -68,23 +68,33 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
       },
     });
   }, [fieldName, registerField]);
+
   return (
-    <Container isFocused={isFocused} isErrored={!!error} isFilled={isFilled}>
-      {Icon && <Icon size={20} />}
-      <TextInput
-        ref={inputElementRef}
-        keyboardAppearance="dark"
-        defaultValue={defaultValue}
-        placeholderTextColor="#666360"
-        maxLength={20}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        onChangeText={value => {
-          inputValueRef.current.value = value;
-        }}
-        {...rest}
-      />
-    </Container>
+    <>
+      <Container
+        isFocused={isFocused}
+        isErrored={!!error}
+        isFilled={isFilled}
+        testID="input-container"
+      >
+        {Icon && <Icon size={20} />}
+        <TextInput
+          ref={inputElementRef}
+          keyboardAppearance="dark"
+          defaultValue={defaultValue}
+          placeholderTextColor="#666360"
+          maxLength={20}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          onChangeText={value => {
+            inputValueRef.current.value = value;
+          }}
+          testID={`input-${name}`}
+          {...rest}
+        />
+      </Container>
+      {error && <Error>{error}</Error>}
+    </>
   );
 };
 export default forwardRef(Input);
