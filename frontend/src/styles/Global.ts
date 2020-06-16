@@ -26,4 +26,17 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  .spin {
+    animation: spin 2s infinite linear;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(359deg);
+    }
+  }
 `;
