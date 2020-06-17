@@ -1,8 +1,9 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { FiUser, FiLoader } from 'react-icons/fi';
 import * as Yup from 'yup';
+import { useHistory } from 'react-router-dom';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -23,7 +24,14 @@ interface FormDataProps {
 
 const Access: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { loading, initGame } = useIntegration();
+  const { loading, initGame, hash } = useIntegration();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (hash && hash.id) {
+      history.push(`walt-player${hash.id}`);
+    }
+  }, [hash, history]);
 
   const handleOnSubmit = useCallback(
     async (data: FormDataProps) => {
@@ -39,7 +47,7 @@ const Access: React.FC = () => {
           abortEarly: false,
         });
 
-        initGame(data);
+        await initGame(data);
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationError(error);

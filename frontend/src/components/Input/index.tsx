@@ -93,7 +93,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
           {...rest}
         />
       </Container>
-      {error && <Error>{error}</Error>}
+      {error && <Error testID="input-error">{error}</Error>}
     </>
   );
 };
