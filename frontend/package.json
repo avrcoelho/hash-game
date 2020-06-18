@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-native-community/hooks": "^2.6.0",
     "@unform/core": "^2.1.0",
     "@unform/mobile": "^2.1.0",
     "axios": "^0.19.2",
@@ -85,6 +86,7 @@
   "jest": {
     "preset": "@testing-library/react-native",
     "setupFilesAfterEnv": [
+      "./jestSetup.js",
       "@testing-library/react-native/jest-preset",
       "jest-localstorage-mock"
     ],

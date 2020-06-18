@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Clipboard } from 'react-native';
+import { useClipboard } from '@react-native-community/hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { FiCopy } from 'react-icons/fi';
 
@@ -22,6 +22,7 @@ const Invite: React.FC = () => {
   const { id } = useParams<Params>();
   const { showGame, error } = useIntegration();
   const history = useHistory();
+  const [, setString] = useClipboard();
 
   useEffect(() => {
     async function getGame() {
@@ -38,8 +39,8 @@ const Invite: React.FC = () => {
   }, [error, history]);
 
   const copyToClipboard = useCallback(() => {
-    Clipboard.setString(`${process.env.REACT_APP_API}/player2/${id}`);
-  }, []);
+    setString(`${process.env.REACT_APP_API}/player2/${id}`);
+  }, [id, setString]);
 
   return (
     <Container>
@@ -47,7 +48,7 @@ const Invite: React.FC = () => {
       <Info>Envie o link para alguem e aguarde a sua entreada</Info>
       <LinkContainer>
         <Link>{`${process.env.REACT_APP_API}/player2/${id}`}</Link>
-        <CopyButton onPress={copyToClipboard}>
+        <CopyButton onPress={copyToClipboard} testID="button-copy">
           <FiCopy size={15} color="#efefef" />
         </CopyButton>
       </LinkContainer>

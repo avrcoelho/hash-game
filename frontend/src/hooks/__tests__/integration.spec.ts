@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-hooks';
 import MockAdapter from 'axios-mock-adapter';
 import { toast } from 'react-toastify';
 
@@ -24,8 +24,10 @@ describe('Integration hook', () => {
       wrapper: IntegrationProvider,
     });
 
-    result.current.initGame({
-      player_1: 'johndoe',
+    act(() => {
+      result.current.initGame({
+        player_1: 'johndoe',
+      });
     });
 
     await waitForNextUpdate();
@@ -46,8 +48,10 @@ describe('Integration hook', () => {
       wrapper: IntegrationProvider,
     });
 
-    result.current.initGame({
-      player_1: 'johndoe',
+    act(() => {
+      result.current.initGame({
+        player_1: 'johndoe',
+      });
     });
 
     await waitForNextUpdate();
@@ -70,6 +74,49 @@ describe('Integration hook', () => {
     });
 
     expect(sessionStorage.getItem).toHaveBeenCalled();
+  });
+
+  it('should ble able to show data game', async () => {
+    const apiResponse = {
+      hash: {
+        game: [],
+        player_1: 'johndoe',
+        id: '123',
+      },
+      token: '123',
+    };
+
+    apiMock.onGet(`hash/123`).reply(200, apiResponse);
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.showGame('123');
+    });
+
+    await waitForNextUpdate();
+
+    expect(result.current.hash).toEqual(apiResponse);
+  });
+
+  it('should ble able to error in show data game', async () => {
+    apiMock.onGet('hash/123').reply(400);
+
+    const spyToast = jest.spyOn(toast, 'error');
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.showGame('123');
+    });
+
+    await waitForNextUpdate();
+
+    expect(spyToast).toHaveBeenCalled();
   });
 
   // it('should be able to signout', () => {
