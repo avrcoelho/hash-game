@@ -13,6 +13,7 @@ interface IntegrationState {
   token: string;
   hash: HashData;
   loading: boolean;
+  error: boolean;
 }
 
 interface ResponseInitGameData {
@@ -23,8 +24,10 @@ interface ResponseInitGameData {
 interface IntegrationContextData {
   hash: HashData;
   loading: boolean;
+  error: boolean;
   initGame(data: Pick<HashData, 'player_1'>): Promise<void>;
   insertPlay2(data: Pick<HashData, 'player_2'>): Promise<void>;
+  showGame(id: string): Promise<void>;
 }
 
 // as IntegrationContext)
@@ -39,10 +42,10 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     if (token) {
       api.defaults.headers.authorization = `Bearer ${token}`;
 
-      return { token, loading: false } as IntegrationState;
+      return { token, loading: false, error: false } as IntegrationState;
     }
 
-    return { loading: false } as IntegrationState;
+    return { loading: false, error: false } as IntegrationState;
   });
 
   const initGame = useCallback(
@@ -95,9 +98,32 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     [],
   );
 
+  const showGame = useCallback(async (id: string) => {
+    setData(state => ({ ...state, loading: true }));
+
+    try {
+      const response = await api.get<HashData>(`hash/${id}`);
+
+      setData(state => ({ ...state, hash: response.data }));
+    } catch (error) {
+      setData(state => ({ ...state, error: true }));
+
+      toast.error(error.response.data.message);
+    } finally {
+      setData(state => ({ ...state, loading: false }));
+    }
+  }, []);
+
   return (
     <IntegrationContext.Provider
-      value={{ hash: data.hash, loading: data.loading, initGame, insertPlay2 }}
+      value={{
+        hash: data.hash,
+        loading: data.loading,
+        error: data.error,
+        initGame,
+        insertPlay2,
+        showGame,
+      }}
     >
       {children}
     </IntegrationContext.Provider>

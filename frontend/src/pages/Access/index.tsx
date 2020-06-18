@@ -29,7 +29,7 @@ const Access: React.FC = () => {
 
   useEffect(() => {
     if (hash && hash.id) {
-      history.push(`walt-player${hash.id}`);
+      history.push(`invite/${hash.id}`);
     }
   }, [hash, history]);
 
