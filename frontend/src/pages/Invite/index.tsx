@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useClipboard } from '@react-native-community/hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { FiCopy } from 'react-icons/fi';
+import socketio from 'socket.io-client';
 
 import { useIntegration } from '../../hooks/integration';
 
@@ -16,6 +17,10 @@ import {
 
 interface Params {
   id: string;
+}
+
+interface GameData {
+  player_2: string;
 }
 
 const Invite: React.FC = () => {
@@ -41,6 +46,24 @@ const Invite: React.FC = () => {
   const copyToClipboard = useCallback(() => {
     setString(`${process.env.REACT_APP_API}/player2/${id}`);
   }, [id, setString]);
+
+  const socket = useMemo(
+    () =>
+      socketio(process.env.REACT_APP_API || 'http://localhost:3333', {
+        query: {
+          id,
+        },
+      }),
+    [id],
+  );
+
+  useEffect(() => {
+    socket.on('player2Entered', (gameData: GameData) => {
+      if (gameData.player_2) {
+        history.push(`/game/${id}`);
+      }
+    });
+  }, [socket]);
 
   return (
     <Container>

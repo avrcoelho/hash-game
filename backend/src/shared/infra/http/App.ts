@@ -37,12 +37,12 @@ class App {
 
     // escuta os eventos que estão rolando dentro do io
     this.io.on('connection', socket => {
-      const { code } = socket.handshake.query;
+      const { id } = socket.handshake.query;
 
-      this.connectedUsers[code] = socket.id;
+      this.connectedUsers[id] = socket.id;
 
       socket.on('disconnect', () => {
-        delete this.connectedUsers[code];
+        delete this.connectedUsers[id];
       });
     });
   }

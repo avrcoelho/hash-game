@@ -17,6 +17,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-toastify": "^6.0.5",
+    "socket.io-client": "^2.3.0",
     "styled-components": "^5.1.1",
     "typescript": "~3.7.2",
     "yup": "^0.29.1"
@@ -61,6 +62,7 @@
     "@types/react-native": "^0.62.13",
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-router-dom": "^5.1.5",
+    "@types/socket.io-client": "^1.4.33",
     "@types/styled-components": "^5.1.0",
     "@types/yup": "^0.29.3",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
