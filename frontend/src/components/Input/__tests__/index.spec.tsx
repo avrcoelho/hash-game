@@ -1,10 +1,26 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { FiUser } from 'react-icons/fi';
-import { Form } from '@unform/mobile';
 import '@testing-library/jest-native/extend-expect';
 
 import Input from '..';
+
+const mockedError = jest.fn();
+
+mockedError.mockImplementation(() => undefined);
+
+jest.mock('@unform/core', () => {
+  return {
+    useField() {
+      return {
+        fieldName: 'email',
+        defaultValue: '',
+        error: mockedError(),
+        registerField: jest.fn(),
+      };
+    },
+  };
+});
 
 describe('Input', () => {
   const props = {
@@ -14,21 +30,16 @@ describe('Input', () => {
   };
 
   it('should be able to render input and props', () => {
-    const { getByPlaceholderText } = render(
-      <Form onSubmit={() => {}}>
-        <Input {...props} />
-      </Form>,
+    const { getByPlaceholderText, queryByTestId } = render(
+      <Input {...props} />,
     );
 
     expect(getByPlaceholderText(props.placeholder)).toBeTruthy();
+    expect(queryByTestId('input-error')).toBeFalsy();
   });
 
   it('should be able to border when focused input', () => {
-    const { getByTestId } = render(
-      <Form onSubmit={() => {}}>
-        <Input {...props} />
-      </Form>,
-    );
+    const { getByTestId } = render(<Input {...props} />);
 
     fireEvent.focus(getByTestId(`input-${props.name}`));
 
@@ -44,11 +55,7 @@ describe('Input', () => {
   });
 
   it('should be able to color when filled input', () => {
-    const { getByTestId } = render(
-      <Form onSubmit={() => {}}>
-        <Input {...props} />
-      </Form>,
-    );
+    const { getByTestId } = render(<Input {...props} />);
 
     fireEvent.changeText(getByTestId(`input-${props.name}`), 'tester');
     fireEvent.blur(getByTestId(`input-${props.name}`));
@@ -63,5 +70,13 @@ describe('Input', () => {
     expect(getByTestId('input-container')).not.toHaveStyle({
       color: '#ffd21f',
     });
+  });
+
+  it('should be able to render error', () => {
+    mockedError.mockImplementation(() => 'Invalid input');
+
+    const { getByText } = render(<Input {...props} />);
+
+    expect(getByText('Invalid input')).toBeTruthy();
   });
 });
