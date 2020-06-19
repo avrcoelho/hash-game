@@ -25,7 +25,7 @@ interface IntegrationContextData {
   hash: HashData;
   loading: boolean;
   error: boolean;
-  initGame(data: Pick<HashData, 'player_1'>): Promise<void>;
+  initGame(data: Pick<HashData, 'player_1'>): Promise<void | string>;
   insertPlay2(data: Pick<HashData, 'player_2'>): Promise<void>;
   showGame(id: string): Promise<void>;
 }
@@ -64,6 +64,8 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         api.defaults.headers.authorization = `Bearer ${token}`;
 
         setData(state => ({ ...state, token, hash }));
+
+        return hash.id;
       } catch {
         toast.error('Houve uma falha ao acessar o jogo. Tente mais tarde');
       } finally {
@@ -90,7 +92,6 @@ export const IntegrationProvider: React.FC = ({ children }) => {
 
         setData(state => ({ ...state, token, hash }));
       } catch {
-        alert(1);
       } finally {
         setData(state => ({ ...state, loading: false }));
       }

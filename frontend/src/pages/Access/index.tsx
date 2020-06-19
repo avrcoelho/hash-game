@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { FiUser, FiLoader } from 'react-icons/fi';
@@ -24,14 +24,8 @@ interface FormDataProps {
 
 const Access: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { loading, initGame, hash } = useIntegration();
+  const { loading, initGame } = useIntegration();
   const history = useHistory();
-
-  useEffect(() => {
-    if (hash && hash.id) {
-      history.push(`invite/${hash.id}`);
-    }
-  }, [hash, history]);
 
   const handleOnSubmit = useCallback(
     async (data: FormDataProps) => {
@@ -47,7 +41,11 @@ const Access: React.FC = () => {
           abortEarly: false,
         });
 
-        await initGame(data);
+        const id = await initGame(data);
+
+        if (id) {
+          history.push(`invite/${id}`);
+        }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationError(error);
@@ -58,7 +56,7 @@ const Access: React.FC = () => {
         }
       }
     },
-    [initGame],
+    [initGame, history],
   );
 
   return (

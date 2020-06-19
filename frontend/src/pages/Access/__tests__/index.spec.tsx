@@ -4,7 +4,7 @@ import { render, fireEvent, wait, act } from '@testing-library/react-native';
 import Access from '../';
 
 const mockedHistoryPush = jest.fn();
-const mockedInitGame = jest.fn();
+const mockedInitGame = jest.fn().mockReturnValue('123');
 const mockedHash = jest.fn();
 
 mockedHash.mockImplementation(() => ({}));
@@ -61,6 +61,7 @@ describe('Access', () => {
       expect(mockedInitGame).toHaveBeenCalledWith({
         player_1: 'tester',
       });
+      expect(mockedHistoryPush).toHaveBeenCalledWith('invite/123');
     });
   });
 });

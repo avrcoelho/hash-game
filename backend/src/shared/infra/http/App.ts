@@ -39,6 +39,8 @@ class App {
     this.io.on('connection', socket => {
       const { id } = socket.handshake.query;
 
+      console.log(id);
+
       this.connectedUsers[id] = socket.id;
 
       socket.on('disconnect', () => {

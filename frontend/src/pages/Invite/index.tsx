@@ -63,7 +63,7 @@ const Invite: React.FC = () => {
         history.push(`/game/${id}`);
       }
     });
-  }, [socket]);
+  }, [socket, history, id]);
 
   return (
     <Container>
