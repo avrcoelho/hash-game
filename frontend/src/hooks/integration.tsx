@@ -26,7 +26,7 @@ interface IntegrationContextData {
   loading: boolean;
   error: boolean;
   initGame(data: Pick<HashData, 'player_1'>): Promise<void | string>;
-  insertPlay2(data: Pick<HashData, 'player_2'>): Promise<void>;
+  insertPlay2(data: Pick<HashData, 'player_2'>): Promise<void | string>;
   showGame(id: string): Promise<void>;
 }
 
@@ -91,6 +91,8 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         api.defaults.headers.authorization = `Bearer ${token}`;
 
         setData(state => ({ ...state, token, hash }));
+
+        return hash.id;
       } catch {
       } finally {
         setData(state => ({ ...state, loading: false }));

@@ -1,10 +1,11 @@
 import React from 'react';
 import { render, fireEvent, wait, act } from '@testing-library/react-native';
 
-import Access from '../';
+import AccessPlayer2 from '../';
 
 const mockedHistoryPush = jest.fn();
-const mockedInitGame = jest.fn().mockReturnValue('123');
+const mockedInsertPlay2 = jest.fn().mockReturnValue('123');
+const mockedShowGame = jest.fn();
 
 jest.mock(
   'react-native/Libraries/Components/Touchable/TouchableOpacity.js',
@@ -24,40 +25,45 @@ jest.mock('react-router-dom', () => {
     useHistory: () => ({
       push: mockedHistoryPush,
     }),
+    useParams: () => ({
+      id: '123',
+    }),
   };
 });
 
 jest.mock('../../../hooks/integration', () => {
   return {
     useIntegration: () => ({
-      initGame: mockedInitGame,
+      showGame: mockedShowGame,
+      insertPlay2: mockedInsertPlay2,
       loading: false,
+      error: false,
     }),
   };
 });
 
-describe('Access', () => {
+describe('AccessPlayer2', () => {
   it('should be able to show error when invalid input', async () => {
-    const { getByTestId } = render(<Access />);
+    const { getByTestId } = render(<AccessPlayer2 />);
 
     fireEvent.press(getByTestId('button'));
 
-    await wait(() => expect(mockedInitGame).not.toHaveBeenCalled());
+    await wait(() => expect(mockedInsertPlay2).not.toHaveBeenCalled());
   });
 
-  it('should be able fetch playe 1', async () => {
-    const { getByTestId } = render(<Access />);
+  it('should be able fetch playe 2', async () => {
+    const { getByTestId } = render(<AccessPlayer2 />);
 
     await act(async () => {
-      fireEvent.changeText(getByTestId(`input-player_1`), 'tester');
+      fireEvent.changeText(getByTestId(`input-player_2`), 'tester');
       fireEvent.press(getByTestId('button'));
     });
 
     await wait(() => {
-      expect(mockedInitGame).toHaveBeenCalledWith({
-        player_1: 'tester',
+      expect(mockedInsertPlay2).toHaveBeenCalledWith({
+        player_2: 'tester',
       });
-      expect(mockedHistoryPush).toHaveBeenCalledWith('invite/123');
+      expect(mockedHistoryPush).toHaveBeenCalledWith('game/123');
     });
   });
 });
