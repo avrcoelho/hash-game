@@ -26,7 +26,7 @@ interface IntegrationContextData {
   loading: boolean;
   error: boolean;
   initGame(data: Pick<HashData, 'player_1'>): Promise<void | string>;
-  insertPlay2(data: Pick<HashData, 'player_2'>): Promise<void | string>;
+  insertPlay2(data: Pick<HashData, 'player_2' | 'id'>): Promise<void | string>;
   showGame(id: string): Promise<void>;
 }
 
@@ -76,11 +76,11 @@ export const IntegrationProvider: React.FC = ({ children }) => {
   );
 
   const insertPlay2 = useCallback(
-    async ({ player_2 }: Pick<HashData, 'player_2'>) => {
+    async ({ player_2, id }: Pick<HashData, 'player_2' | 'id'>) => {
       setData(state => ({ ...state, loading: true }));
 
       try {
-        const response = await api.patch<ResponseInitGameData>('hash', {
+        const response = await api.patch<ResponseInitGameData>(`hash/${id}`, {
           player_2,
         });
 

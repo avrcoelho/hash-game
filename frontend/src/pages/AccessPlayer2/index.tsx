@@ -60,10 +60,10 @@ const AccessPlayer2: React.FC = () => {
           abortEarly: false,
         });
 
-        const id = await insertPlay2(data);
+        const response = await insertPlay2({ ...data, id });
 
-        if (id) {
-          history.push(`game/${id}`);
+        if (response) {
+          history.push(`game/${response}`);
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {

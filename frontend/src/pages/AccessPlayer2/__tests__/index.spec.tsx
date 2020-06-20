@@ -62,6 +62,7 @@ describe('AccessPlayer2', () => {
     await wait(() => {
       expect(mockedInsertPlay2).toHaveBeenCalledWith({
         player_2: 'tester',
+        id: '123',
       });
       expect(mockedHistoryPush).toHaveBeenCalledWith('game/123');
     });

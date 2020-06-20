@@ -119,6 +119,60 @@ describe('Integration hook', () => {
     expect(spyToast).toHaveBeenCalled();
   });
 
+  it('should ble able to insert player 2', async () => {
+    const apiResponse = {
+      hash: {
+        game: [],
+        player_1: 'johndoe',
+        player_2: 'johntree',
+        id: '123',
+      },
+      token: '123',
+    };
+
+    apiMock.onPatch('hash/123').reply(200, apiResponse);
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.insertPlay2({
+        player_2: 'johntree',
+        id: '123',
+      });
+    });
+
+    await waitForNextUpdate();
+
+    expect(result.current.hash.player_2).toBe('johntree');
+    expect(sessionStorage.setItem).toHaveBeenCalledWith(
+      '@HashGame:token',
+      '123',
+    );
+  });
+
+  it('should ble able to error in init game', async () => {
+    apiMock.onPatch('hash/123').reply(400);
+
+    const spyToast = jest.spyOn(toast, 'error');
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.insertPlay2({
+        player_2: 'johntree',
+        id: '123',
+      });
+    });
+
+    await waitForNextUpdate();
+
+    expect(spyToast).toHaveBeenCalled();
+  });
+
   // it('should be able to signout', () => {
   //   jest.spyOn(Storage.prototype, 'getItem').mockImplementation(key => {
   //     switch (key) {
