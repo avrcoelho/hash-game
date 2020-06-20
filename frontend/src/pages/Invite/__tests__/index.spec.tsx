@@ -50,12 +50,12 @@ describe('Invite page', () => {
   it('should be able to click button copy to clipboard', () => {
     const { getByText, getByTestId } = render(<Invite />);
 
-    expect(getByText('http://localhost:3333/player2/123')).toBeTruthy();
+    expect(getByText('http://localhost:3000/player2/123')).toBeTruthy();
 
     fireEvent.press(getByTestId('button-copy'));
 
     expect(mockedClickboard).toHaveBeenCalledWith(
-      'http://localhost:3333/player2/123',
+      'http://localhost:3000/player2/123',
     );
   });
 });

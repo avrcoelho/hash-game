@@ -5,7 +5,6 @@ import AccessPlayer2 from '../';
 
 const mockedHistoryPush = jest.fn();
 const mockedInsertPlay2 = jest.fn().mockReturnValue('123');
-const mockedShowGame = jest.fn();
 
 jest.mock(
   'react-native/Libraries/Components/Touchable/TouchableOpacity.js',
@@ -34,7 +33,6 @@ jest.mock('react-router-dom', () => {
 jest.mock('../../../hooks/integration', () => {
   return {
     useIntegration: () => ({
-      showGame: mockedShowGame,
       insertPlay2: mockedInsertPlay2,
       loading: false,
       error: false,

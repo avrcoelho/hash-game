@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
-import { FiUser, FiLoader } from 'react-icons/fi';
+import { FiUser } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import {
   LogoContainer,
   LogoText,
   FormContainer,
+  Loader,
 } from './styles';
 
 interface FormDataProps {
@@ -73,11 +74,7 @@ const Access: React.FC = () => {
               placeholder="Nome do jogador"
             />
             <Button onPress={() => formRef.current?.submitForm()}>
-              {loading ? (
-                <FiLoader size={18} color="#312e38" className="spin" />
-              ) : (
-                'Acessar'
-              )}
+              {loading ? <Loader /> : 'Acessar'}
             </Button>
           </Form>
         </FormContainer>

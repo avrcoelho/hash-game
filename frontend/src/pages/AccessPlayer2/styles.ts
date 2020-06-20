@@ -28,3 +28,8 @@ export const FormContainer = styled.View`
   height: 200px;
   width: 300px;
 `;
+
+export const Loader = styled.ActivityIndicator.attrs({
+  size: 'small',
+  color: '#312e38',
+})``;

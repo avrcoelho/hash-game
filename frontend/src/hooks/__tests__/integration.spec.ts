@@ -152,7 +152,7 @@ describe('Integration hook', () => {
     );
   });
 
-  it('should ble able to error in init game', async () => {
+  it('should ble able to error issert play 2', async () => {
     apiMock.onPatch('hash/123').reply(400);
 
     const spyToast = jest.spyOn(toast, 'error');

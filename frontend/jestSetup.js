@@ -1,1 +1,1 @@
-process.env.REACT_APP_API = "http://localhost:3333";
+process.env.REACT_APP_URL = 'http://localhost:3000';

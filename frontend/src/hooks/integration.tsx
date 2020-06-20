@@ -7,6 +7,9 @@ interface HashData {
   id: string;
   player_1: string;
   player_2: string;
+  nextPlayer: boolean;
+  playerInit: boolean;
+  you: string;
 }
 
 interface IntegrationState {
@@ -93,7 +96,8 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         setData(state => ({ ...state, token, hash }));
 
         return hash.id;
-      } catch {
+      } catch (error) {
+        toast.error(error.response.data.message);
       } finally {
         setData(state => ({ ...state, loading: false }));
       }

@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useEffect } from 'react';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
-import { FiUser, FiLoader } from 'react-icons/fi';
+import { FiUser } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import {
   LogoContainer,
   LogoText,
   FormContainer,
+  Loader,
 } from './styles';
 
 interface FormDataProps {
@@ -28,17 +29,9 @@ interface Params {
 
 const AccessPlayer2: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const { loading, error, insertPlay2 } = useIntegration();
   const { id } = useParams<Params>();
-  const { loading, error, insertPlay2, showGame } = useIntegration();
   const history = useHistory();
-
-  useEffect(() => {
-    async function getGame() {
-      await showGame(id);
-    }
-
-    getGame();
-  }, [id, showGame]);
 
   useEffect(() => {
     if (error) {
@@ -63,7 +56,7 @@ const AccessPlayer2: React.FC = () => {
         const response = await insertPlay2({ ...data, id });
 
         if (response) {
-          history.push(`game/${response}`);
+          history.push(`/game/${response}`);
         }
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -92,11 +85,7 @@ const AccessPlayer2: React.FC = () => {
               placeholder="Nome do jogador"
             />
             <Button onPress={() => formRef.current?.submitForm()}>
-              {loading ? (
-                <FiLoader size={18} color="#312e38" className="spin" />
-              ) : (
-                'Acessar'
-              )}
+              {loading ? <Loader /> : 'Acessar'}
             </Button>
           </Form>
         </FormContainer>
