@@ -44,7 +44,7 @@ const Invite: React.FC = () => {
   }, [error, history]);
 
   const copyToClipboard = useCallback(() => {
-    setString(`${process.env.REACT_APP_API}/player2/${id}`);
+    setString(`${process.env.REACT_APP_URL}/player2/${id}`);
   }, [id, setString]);
 
   const socket = useMemo(
@@ -70,7 +70,7 @@ const Invite: React.FC = () => {
       <LogoText>Jogo da velha</LogoText>
       <Info>Envie o link para alguem e aguarde a sua entreada</Info>
       <LinkContainer>
-        <Link>{`${process.env.REACT_APP_API}/player2/${id}`}</Link>
+        <Link>{`${process.env.REACT_APP_URL}/player2/${id}`}</Link>
         <CopyButton onPress={copyToClipboard} testID="button-copy">
           <FiCopy size={15} color="#efefef" />
         </CopyButton>

@@ -12,7 +12,7 @@ const Routes: React.FC = () => (
     <Switch>
       <Route path="/" exact component={Access} />
       <Route path="/invite/:id" component={Invite} />
-      <Route path="/game/:id" component={AccessPlayer2} />
+      <Route path="/player2/:id" component={AccessPlayer2} />
     </Switch>
   </BrowserRouter>
 );

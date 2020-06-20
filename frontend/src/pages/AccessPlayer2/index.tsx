@@ -75,7 +75,7 @@ const AccessPlayer2: React.FC = () => {
         }
       }
     },
-    [insertPlay2, history],
+    [insertPlay2, history, id],
   );
 
   return (
