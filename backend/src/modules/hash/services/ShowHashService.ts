@@ -30,7 +30,7 @@ class ShowHashService {
     }
 
     let playerInit = false;
-    let nextPlayer = true;
+    let nextPlayer = false;
 
     if (hash.player_1 === player && (!hash.game || !hash.game.length)) {
       playerInit = true;
@@ -39,8 +39,8 @@ class ShowHashService {
     if (hash.game && hash.game.length) {
       const lastMove = hash.game[hash.game.length - 1];
 
-      if (lastMove.player === player) {
-        nextPlayer = false;
+      if (lastMove.player !== player) {
+        nextPlayer = true;
       }
     }
 

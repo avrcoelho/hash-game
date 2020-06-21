@@ -48,16 +48,13 @@ const Invite: React.FC = () => {
   }, [id, setString]);
 
   const socket = useMemo(
-    () =>
-      socketio(process.env.REACT_APP_API || 'http://localhost:3333', {
-        query: {
-          id,
-        },
-      }),
-    [id],
+    () => socketio(process.env.REACT_APP_API || 'http://localhost:3333'),
+    [],
   );
 
   useEffect(() => {
+    socket.emit('connectRoom', id);
+
     socket.on('player2Entered', (gameData: GameData) => {
       if (gameData.player_2) {
         history.push(`/game/${id}`);

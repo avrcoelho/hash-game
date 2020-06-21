@@ -36,6 +36,21 @@ describe('showGame', () => {
     expect(body.id).toBe(hash.id);
   });
 
+  it('should be able to invalid token', async () => {
+    const {
+      body: { hash, token },
+    } = await request(app.server).post('/hash').send({
+      player_1: 'Tester',
+    });
+
+    const { body, status } = await request(app.server)
+      .get(`/hash/${hash.id}`)
+      .set('Authorization', `bearer ${token}1`);
+
+    expect(status).toBe(401);
+    expect(body.message).toBe('Invalid JWT token');
+  });
+
   it('should be able to invalid id', async () => {
     const {
       body: { hash, token },

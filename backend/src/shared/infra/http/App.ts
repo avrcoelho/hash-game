@@ -37,14 +37,8 @@ class App {
 
     // escuta os eventos que estão rolando dentro do io
     this.io.on('connection', socket => {
-      const { id } = socket.handshake.query;
-
-      console.log(id);
-
-      this.connectedUsers[id] = socket.id;
-
-      socket.on('disconnect', () => {
-        delete this.connectedUsers[id];
+      socket.on('connectRoom', hash => {
+        socket.join(hash);
       });
     });
   }
@@ -59,7 +53,6 @@ class App {
 
     this.app.use((request: Request, response: Response, next: NextFunction) => {
       request.io = this.io;
-      request.connectedUsers = this.connectedUsers;
 
       next();
     });

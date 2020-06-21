@@ -13,7 +13,7 @@ class MoveController {
 
     const hash = await moveService.execute({ id, player, position });
 
-    request.io.to(id).emit('hashUpdated', { ...hash, nextPlayer: true });
+    request.io.in(id).emit('hashUpdated', { ...hash, nextPlayer: true });
 
     return response.json({ ...hash, nextPlayer: false });
   }

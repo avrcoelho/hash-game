@@ -3,13 +3,20 @@ import { toast } from 'react-toastify';
 
 import api from '../services/api';
 
-interface HashData {
+export interface GameData {
+  player?: string;
+  position: number;
+  type?: 'x' | 'o';
+}
+
+export interface HashData {
   id: string;
   player_1: string;
   player_2: string;
   nextPlayer: boolean;
   playerInit: boolean;
   you: string;
+  game: GameData[];
 }
 
 interface IntegrationState {
@@ -24,6 +31,11 @@ interface ResponseInitGameData {
   hash: HashData;
 }
 
+interface MoveGameRequest {
+  id: string;
+  position: number;
+}
+
 interface IntegrationContextData {
   hash: HashData;
   loading: boolean;
@@ -31,6 +43,8 @@ interface IntegrationContextData {
   initGame(data: Pick<HashData, 'player_1'>): Promise<void | string>;
   insertPlay2(data: Pick<HashData, 'player_2' | 'id'>): Promise<void | string>;
   showGame(id: string): Promise<void>;
+  moveGame(data: MoveGameRequest): Promise<void>;
+  updateData(data: HashData): void;
 }
 
 // as IntegrationContext)
@@ -121,6 +135,26 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+  const moveGame = useCallback(async ({ id, position }: MoveGameRequest) => {
+    setData(state => ({ ...state, loading: true }));
+
+    try {
+      const response = await api.post<HashData>(`move/${id}`, { position });
+
+      setData(state => ({ ...state, hash: response.data }));
+    } catch (error) {
+      setData(state => ({ ...state, error: true }));
+
+      toast.error(error.response.data.message);
+    } finally {
+      setData(state => ({ ...state, loading: false }));
+    }
+  }, []);
+
+  const updateData = useCallback((hash: HashData) => {
+    setData(state => ({ ...state, hash }));
+  }, []);
+
   return (
     <IntegrationContext.Provider
       value={{
@@ -130,6 +164,8 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         initGame,
         insertPlay2,
         showGame,
+        moveGame,
+        updateData,
       }}
     >
       {children}

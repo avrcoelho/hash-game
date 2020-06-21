@@ -35,11 +35,7 @@ class HashController {
 
     const hash = await insertPlay2Service.execute({ id, player_2 });
 
-    const ownerSocket = request.connectedUsers[id];
-
-    if (ownerSocket) {
-      request.io.to(ownerSocket).emit('player2Entered', { ...hash.hash });
-    }
+    request.io.in(id).emit('player2Entered', { ...hash.hash });
 
     return response.json(hash);
   }
