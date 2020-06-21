@@ -3,7 +3,6 @@ import { render, fireEvent, wait, act } from '@testing-library/react-native';
 
 import AccessPlayer2 from '../';
 
-const mockedHistoryPush = jest.fn();
 const mockedInsertPlay2 = jest.fn().mockReturnValue('123');
 
 jest.mock(
@@ -21,9 +20,6 @@ jest.mock(
 
 jest.mock('react-router-dom', () => {
   return {
-    useHistory: () => ({
-      push: mockedHistoryPush,
-    }),
     useParams: () => ({
       id: '123',
     }),
@@ -62,7 +58,6 @@ describe('AccessPlayer2', () => {
         player_2: 'tester',
         id: '123',
       });
-      expect(mockedHistoryPush).toHaveBeenCalledWith('game/123');
     });
   });
 });

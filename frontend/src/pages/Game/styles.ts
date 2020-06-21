@@ -3,6 +3,10 @@ import { FlatList } from 'react-native';
 
 import { GameData } from '../../hooks/integration';
 
+interface PlayerProps {
+  winner: boolean;
+}
+
 export const Container = styled.View`
   flex: 1;
   align-items: center;
@@ -17,9 +21,10 @@ export const Header = styled.View`
   margin-top: 40px;
 `;
 
-export const Player = styled.Text`
+export const Player = styled.Text<PlayerProps>`
   font-size: 20px;
-  background: #efefef;
+  background: ${props => (props.winner ? '#53c100' : '#efefef')};
+  color: #312e38;
   padding: 2px 8px;
   border-radius: 4px;
 `;

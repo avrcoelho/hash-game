@@ -1,9 +1,9 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { FiUser } from 'react-icons/fi';
 import * as Yup from 'yup';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -29,15 +29,8 @@ interface Params {
 
 const AccessPlayer2: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { loading, error, insertPlay2 } = useIntegration();
+  const { loading, insertPlay2 } = useIntegration();
   const { id } = useParams<Params>();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (error) {
-      history.push('/');
-    }
-  }, [error, history]);
 
   const handleOnSubmit = useCallback(
     async (data: FormDataProps) => {
@@ -53,11 +46,7 @@ const AccessPlayer2: React.FC = () => {
           abortEarly: false,
         });
 
-        const response = await insertPlay2({ ...data, id });
-
-        if (response) {
-          history.push(`/game/${response}`);
-        }
+        await insertPlay2({ ...data, id });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationError(error);
@@ -68,7 +57,7 @@ const AccessPlayer2: React.FC = () => {
         }
       }
     },
-    [insertPlay2, history, id],
+    [insertPlay2, id],
   );
 
   return (

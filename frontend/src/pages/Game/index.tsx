@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import socketio from 'socket.io-client';
 
 import { useIntegration, GameData, HashData } from '../../hooks/integration';
@@ -42,32 +42,20 @@ const positions: GameData[] = [
 ];
 
 const Game: React.FC = () => {
-  const {
-    showGame,
-    moveGame,
-    updateData,
-    error,
-    loading,
-    hash,
-  } = useIntegration();
+  const { showGame, moveGame, updateData, hash } = useIntegration();
   const { id } = useParams<Params>();
-  const history = useHistory();
-
-  const socket = useMemo(
-    () => socketio(process.env.REACT_APP_API || 'http://localhost:3333'),
-    [],
-  );
 
   useEffect(() => {
+    const socket = socketio(
+      process.env.REACT_APP_API || 'http://localhost:3333',
+    );
+
     socket.emit('connectRoom', id);
 
     socket.on('hashUpdated', (gameData: HashData) => {
-      console.log(gameData);
-      if (gameData) {
-        updateData(gameData);
-      }
+      updateData(gameData);
     });
-  }, [socket, updateData, id]);
+  }, [updateData, id]);
 
   useEffect(() => {
     async function getGame() {
@@ -76,12 +64,6 @@ const Game: React.FC = () => {
 
     getGame();
   }, [id, showGame]);
-
-  useEffect(() => {
-    if (error) {
-      history.push('/');
-    }
-  }, [error, history]);
 
   const handleMove = useCallback(
     async (position: number) => {
@@ -93,11 +75,17 @@ const Game: React.FC = () => {
   const positionGame = useMemo(() => {
     if (hash) {
       return positions.map(position => {
-        const findPosition = hash.game.find(
+        let findPosition = hash.game.find(
           game => game.position === position.position,
         );
 
         if (findPosition) {
+          if (hash.winningMode) {
+            if (hash.winningMode.includes(position.position)) {
+              findPosition = { ...findPosition, positionWinner: true };
+            }
+          }
+
           return findPosition;
         }
 
@@ -119,22 +107,22 @@ const Game: React.FC = () => {
     return '';
   }, [hash]);
 
-  if (!hash || loading) {
+  if (!hash) {
     return <Loader />;
   }
 
   return (
     <Container>
       <Header>
-        <Player>{hash.player_1}</Player>
-        {
+        <Player winner={hash?.winner === hash.player_1}>{hash.player_1}</Player>
+        {!hash.winningMode && (
           <Turn>
             {hash.playerInit || hash.nextPlayer
               ? 'Sua vez'
               : `Vez de ${opponent}`}
           </Turn>
-        }
-        <Player>{hash.player_2}</Player>
+        )}
+        <Player winner={hash?.winner === hash.player_2}>{hash.player_2}</Player>
       </Header>
       <GameList
         numColumns={3}
@@ -143,7 +131,10 @@ const Game: React.FC = () => {
         renderItem={({ item }) => (
           <ItemGame
             onPress={() => handleMove(item.position)}
-            disabled={!(hash.playerInit || hash.nextPlayer)}
+            disabled={
+              !(hash.playerInit || hash.nextPlayer) || !!hash.winningMode
+            }
+            positionWinner={!!item.positionWinner}
           >
             {String(item.type || '')}
           </ItemGame>

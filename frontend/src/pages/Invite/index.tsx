@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useClipboard } from '@react-native-community/hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { FiCopy } from 'react-icons/fi';
@@ -25,7 +25,7 @@ interface GameData {
 
 const Invite: React.FC = () => {
   const { id } = useParams<Params>();
-  const { showGame, error } = useIntegration();
+  const { showGame } = useIntegration();
   const history = useHistory();
   const [, setString] = useClipboard();
 
@@ -37,22 +37,15 @@ const Invite: React.FC = () => {
     getGame();
   }, [id, showGame]);
 
-  useEffect(() => {
-    if (error) {
-      history.push('/');
-    }
-  }, [error, history]);
-
   const copyToClipboard = useCallback(() => {
     setString(`${process.env.REACT_APP_URL}/player2/${id}`);
   }, [id, setString]);
 
-  const socket = useMemo(
-    () => socketio(process.env.REACT_APP_API || 'http://localhost:3333'),
-    [],
-  );
-
   useEffect(() => {
+    const socket = socketio(
+      process.env.REACT_APP_API || 'http://localhost:3333',
+    );
+
     socket.emit('connectRoom', id);
 
     socket.on('player2Entered', (gameData: GameData) => {
@@ -60,7 +53,7 @@ const Invite: React.FC = () => {
         history.push(`/game/${id}`);
       }
     });
-  }, [socket, history, id]);
+  }, [history, id]);
 
   return (
     <Container>

@@ -3,7 +3,6 @@ import { render, fireEvent, wait, act } from '@testing-library/react-native';
 
 import Access from '../';
 
-const mockedHistoryPush = jest.fn();
 const mockedInitGame = jest.fn().mockReturnValue('123');
 
 jest.mock(
@@ -18,14 +17,6 @@ jest.mock(
     return MockTouchable;
   },
 );
-
-jest.mock('react-router-dom', () => {
-  return {
-    useHistory: () => ({
-      push: mockedHistoryPush,
-    }),
-  };
-});
 
 jest.mock('../../../hooks/integration', () => {
   return {
@@ -57,7 +48,6 @@ describe('Access', () => {
       expect(mockedInitGame).toHaveBeenCalledWith({
         player_1: 'tester',
       });
-      expect(mockedHistoryPush).toHaveBeenCalledWith('invite/123');
     });
   });
 });

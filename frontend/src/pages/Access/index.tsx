@@ -3,7 +3,6 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { FiUser } from 'react-icons/fi';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -26,7 +25,6 @@ interface FormDataProps {
 const Access: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { loading, initGame } = useIntegration();
-  const history = useHistory();
 
   const handleOnSubmit = useCallback(
     async (data: FormDataProps) => {
@@ -42,11 +40,7 @@ const Access: React.FC = () => {
           abortEarly: false,
         });
 
-        const id = await initGame(data);
-
-        if (id) {
-          history.push(`invite/${id}`);
-        }
+        await initGame(data);
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationError(error);
@@ -57,7 +51,7 @@ const Access: React.FC = () => {
         }
       }
     },
-    [initGame, history],
+    [initGame],
   );
 
   return (

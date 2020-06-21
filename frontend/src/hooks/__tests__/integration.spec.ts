@@ -4,8 +4,18 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import { useIntegration, IntegrationProvider } from '../integration';
+import { HashData } from '../integration';
 
 const apiMock = new MockAdapter(api);
+const mockedHistoryPush = jest.fn();
+
+jest.mock('react-router-dom', () => {
+  return {
+    useHistory: () => ({
+      push: mockedHistoryPush,
+    }),
+  };
+});
 
 describe('Integration hook', () => {
   it('should ble able to init game', async () => {
@@ -40,7 +50,7 @@ describe('Integration hook', () => {
   });
 
   it('should ble able to error in init game', async () => {
-    apiMock.onPost('hash').reply(400);
+    apiMock.onPost('hash').reply(400, {});
 
     const spyToast = jest.spyOn(toast, 'error');
 
@@ -102,7 +112,7 @@ describe('Integration hook', () => {
   });
 
   it('should ble able to error in show data game', async () => {
-    apiMock.onGet('hash/123').reply(400);
+    apiMock.onGet('hash/123').reply(500, {});
 
     const spyToast = jest.spyOn(toast, 'error');
 
@@ -117,6 +127,7 @@ describe('Integration hook', () => {
     await waitForNextUpdate();
 
     expect(spyToast).toHaveBeenCalled();
+    expect(mockedHistoryPush).toHaveBeenCalledWith('/');
   });
 
   it('should ble able to insert player 2', async () => {
@@ -171,6 +182,109 @@ describe('Integration hook', () => {
     await waitForNextUpdate();
 
     expect(spyToast).toHaveBeenCalled();
+  });
+
+  it('should ble able to move', async () => {
+    const apiResponse = {
+      game: [
+        {
+          position: 1,
+          player: 'johndoe',
+          type: 'x',
+        },
+      ],
+      player_1: 'johndoe',
+      player_2: 'johntree',
+      id: '123',
+    };
+
+    apiMock.onPost('move/123', { position: 1 }).reply(200, apiResponse);
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.moveGame({
+        position: 1,
+        id: '123',
+      });
+    });
+
+    await waitForNextUpdate();
+
+    expect(result.current.hash.game).toEqual(
+      expect.arrayContaining([
+        {
+          position: 1,
+          player: 'johndoe',
+          type: 'x',
+        },
+      ]),
+    );
+  });
+
+  it('should ble able to move', async () => {
+    apiMock.onPost('move/123', { position: 1 }).reply(400, {});
+
+    const spyToast = jest.spyOn(toast, 'error');
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.moveGame({
+        position: 1,
+        id: '123',
+      });
+    });
+
+    await waitForNextUpdate();
+
+    expect(spyToast).toHaveBeenCalled();
+  });
+
+  it('should ble able to update data', async () => {
+    const data = {
+      game: [
+        {
+          position: 1,
+          player: 'johndoe',
+          type: 'x',
+        },
+      ],
+      player_1: 'johndoe',
+      player_2: 'johntree',
+      id: '123',
+      nextPlayer: true,
+      playerInit: false,
+      you: 'johndoe',
+    } as HashData;
+
+    const apiResponse = {
+      game: [],
+      player_1: 'johndoe',
+      id: '123',
+    };
+
+    apiMock.onGet(`hash/123`).reply(200, apiResponse);
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.showGame('123');
+    });
+
+    await waitForNextUpdate();
+
+    act(() => {
+      result.current.updateData(data);
+    });
+
+    expect(result.current.hash).toEqual(data);
   });
 
   // it('should be able to signout', () => {

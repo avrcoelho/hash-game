@@ -41,7 +41,6 @@ jest.mock('../../../hooks/integration', () => {
   return {
     useIntegration: () => ({
       showGame: mockedShowGame,
-      error: false,
     }),
   };
 });
