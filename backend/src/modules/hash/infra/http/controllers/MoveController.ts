@@ -15,7 +15,7 @@ class MoveController {
 
     request.io.in(id).emit('hashUpdated', { ...hash, nextPlayer: true });
 
-    return response.json({ ...hash, nextPlayer: false });
+    return response.json({ ...hash, playerInit: false, nextPlayer: false });
   }
 }
 

@@ -50,7 +50,7 @@ describe('ShowHashService', () => {
 
     expect(hashData).toHaveProperty('id');
     expect(hashData.playerInit).toBe(true);
-    expect(hashData.nextPlayer).toBe(true);
+    expect(hashData.nextPlayer).toBe(false);
 
     await moveService.execute({
       id: String(hash.id),
