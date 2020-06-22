@@ -21,8 +21,8 @@ export interface HashData {
   id: string;
   player_1: string;
   player_2: string;
-  nextPlayer: boolean;
-  playerInit: boolean;
+  nextPlayer: null | string;
+  playerInit: null | string;
   you: string;
   game: GameData[];
   winningMode?: number[];
@@ -156,12 +156,7 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     setData(state => ({ ...state, loading: true }));
 
     try {
-      const response = await api.post<HashData>(`move/${id}`, { position });
-
-      setData(state => ({
-        ...state,
-        hash: { ...state.hash, ...response.data },
-      }));
+      await api.post<HashData>(`move/${id}`, { position });
     } catch (error) {
       setData(state => ({ ...state }));
 
@@ -171,16 +166,9 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     }
   }, []);
 
-  const updateData = useCallback(
-    (hash: HashData) => {
-      const lastMove = hash.game[hash.game.length - 1];
-
-      if (data.hash && lastMove.player !== data.hash.you) {
-        setData(state => ({ ...state, hash: { ...state.hash, ...hash } }));
-      }
-    },
-    [data.hash],
-  );
+  const updateData = useCallback((hash: HashData) => {
+    setData(state => ({ ...state, hash: { ...state.hash, ...hash } }));
+  }, []);
 
   return (
     <IntegrationContext.Provider

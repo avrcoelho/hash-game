@@ -196,7 +196,7 @@ describe('Integration hook', () => {
       player_1: 'johndoe',
       player_2: 'johntree',
       id: '123',
-    };
+    } as HashData;
 
     apiMock.onPost('move/123', { position: 1 }).reply(200, apiResponse);
 
@@ -209,6 +209,7 @@ describe('Integration hook', () => {
         position: 1,
         id: '123',
       });
+      result.current.updateData(apiResponse);
     });
 
     await waitForNextUpdate();
@@ -257,8 +258,8 @@ describe('Integration hook', () => {
       player_1: 'johndoe',
       player_2: 'johntree',
       id: '123',
-      nextPlayer: true,
-      playerInit: false,
+      nextPlayer: 'johntree',
+      playerInit: null,
       you: 'johndoe',
     } as HashData;
 
@@ -286,59 +287,4 @@ describe('Integration hook', () => {
 
     expect(result.current.hash).toEqual(data);
   });
-
-  // it('should be able to signout', () => {
-  //   jest.spyOn(Storage.prototype, 'getItem').mockImplementation(key => {
-  //     switch (key) {
-  //       case '@GoBarber:token':
-  //         return '1234';
-  //       case '@GoBarber:user':
-  //         return JSON.stringify({
-  //           id: '123',
-  //           name: 'Jonh Doe',
-  //           email: 'johndoe@test.com',
-  //         });
-  //       default:
-  //         return null;
-  //     }
-  //   });
-
-  //   const removeItemSpy = jest.spyOn(Storage.prototype, 'removeItem');
-
-  //   const { result } = renderHook(() => useAuth(), {
-  //     wrapper: AuthProvider,
-  //   });
-
-  //   act(() => {
-  //     result.current.signOut();
-  //   });
-
-  //   expect(removeItemSpy).toHaveBeenCalledTimes(2);
-  //   expect(result.current.user).toBeUndefined();
-  // });
-
-  // it('should be able update data', () => {
-  //   const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
-
-  //   const { result } = renderHook(() => useAuth(), {
-  //     wrapper: AuthProvider,
-  //   });
-
-  //   const user = {
-  //     id: '123',
-  //     name: 'Jonh Doe',
-  //     email: 'johndoe@test.com',
-  //     avatar_url: 'image.jpg',
-  //   };
-
-  //   act(() => {
-  //     result.current.updateUser(user);
-  //   });
-
-  //   expect(setItemSpy).toHaveBeenCalledWith(
-  //     '@GoBarber:user',
-  //     JSON.stringify(user),
-  //   );
-  //   expect(result.current.user).toEqual(user);
-  // });
 });

@@ -49,8 +49,8 @@ describe('ShowHashService', () => {
     });
 
     expect(hashData).toHaveProperty('id');
-    expect(hashData.playerInit).toBe(true);
-    expect(hashData.nextPlayer).toBe(false);
+    expect(hashData.playerInit).toBe('Tester');
+    expect(hashData.nextPlayer).toBe(null);
 
     await moveService.execute({
       id: String(hash.id),
@@ -63,7 +63,7 @@ describe('ShowHashService', () => {
       player: 'Tester',
     });
 
-    expect(hashData.nextPlayer).toBe(false);
+    expect(hashData.nextPlayer).toBe('Tester 2');
 
     await moveService.execute({
       id: String(hash.id),
@@ -76,6 +76,6 @@ describe('ShowHashService', () => {
       player: 'Tester',
     });
 
-    expect(hashData.nextPlayer).toBe(true);
+    expect(hashData.nextPlayer).toBe('Tester');
   });
 });

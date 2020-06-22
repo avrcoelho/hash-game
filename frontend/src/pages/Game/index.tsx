@@ -117,7 +117,7 @@ const Game: React.FC = () => {
         <Player winner={hash?.winner === hash.player_1}>{hash.player_1}</Player>
         {!hash.winningMode && (
           <Turn>
-            {hash.playerInit || hash.nextPlayer
+            {hash.playerInit === hash.you || hash.nextPlayer === hash.you
               ? 'Sua vez'
               : `Vez de ${opponent}`}
           </Turn>
@@ -132,7 +132,8 @@ const Game: React.FC = () => {
           <ItemGame
             onPress={() => handleMove(item.position)}
             disabled={
-              !(hash.playerInit || hash.nextPlayer) || !!hash.winningMode
+              (hash.playerInit !== hash.you && hash.nextPlayer !== hash.you) ||
+              !!hash.winningMode
             }
             positionWinner={!!item.positionWinner}
           >

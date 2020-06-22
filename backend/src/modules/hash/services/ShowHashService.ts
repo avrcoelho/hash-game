@@ -11,8 +11,8 @@ interface IRequest {
 
 interface IResponse extends Hash {
   you: string;
-  playerInit: boolean;
-  nextPlayer: boolean;
+  playerInit: null | string;
+  nextPlayer: null | string;
 }
 
 @injectable()
@@ -29,18 +29,20 @@ class ShowHashService {
       throw new AppError('Jogo não encontrado');
     }
 
-    let playerInit = false;
-    let nextPlayer = false;
+    let playerInit: null | string = null;
+    let nextPlayer: null | string = null;
 
     if (hash.player_1 === player && (!hash.game || !hash.game.length)) {
-      playerInit = true;
+      playerInit = hash.player_1;
     }
 
     if (hash.game && hash.game.length) {
       const lastMove = hash.game[hash.game.length - 1];
 
-      if (lastMove.player !== player) {
-        nextPlayer = true;
+      if (lastMove.player === hash.player_1) {
+        nextPlayer = hash.player_2;
+      } else {
+        nextPlayer = hash.player_1;
       }
     }
 
