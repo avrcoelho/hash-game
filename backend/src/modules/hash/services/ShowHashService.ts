@@ -32,8 +32,12 @@ class ShowHashService {
     let playerInit: null | string = null;
     let nextPlayer: null | string = null;
 
-    if (hash.player_1 === player && (!hash.game || !hash.game.length)) {
+    if (!hash.game || !hash.game.length) {
       playerInit = hash.player_1;
+
+      if (hash.numMatches % 2 !== 0) {
+        playerInit = hash.player_2;
+      }
     }
 
     if (hash.game && hash.game.length) {

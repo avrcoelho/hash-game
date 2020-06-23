@@ -10,6 +10,11 @@ interface IRequest {
   position: number;
 }
 
+interface IResponse extends Hash {
+  playerInit: null;
+  nextPlayer: string;
+}
+
 @injectable()
 class MoveService {
   constructor(
@@ -17,8 +22,8 @@ class MoveService {
     private hahsRepository: IHashRepository,
   ) {}
 
-  public async execute({ id, player, position }: IRequest): Promise<Hash> {
-    const hash = await this.hahsRepository.findById(id);
+  public async execute({ id, player, position }: IRequest): Promise<IResponse> {
+    let hash = await this.hahsRepository.findById(id);
 
     if (!hash) {
       throw new AppError('Jogo não encontrado');
@@ -91,9 +96,18 @@ class MoveService {
     if (isWinner) {
       hash.winner = player;
       hash.winningMode = isWinner;
+      hash.numMatches += 1;
     }
 
-    return await this.hahsRepository.save(hash);
+    hash = await this.hahsRepository.save(hash);
+
+    let nextPlayer = hash.player_1;
+
+    if (player === hash.player_1) {
+      nextPlayer = hash.player_2;
+    }
+
+    return { ...hash, playerInit: null, nextPlayer };
   }
 }
 

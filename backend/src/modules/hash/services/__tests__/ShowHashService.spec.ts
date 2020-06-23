@@ -78,4 +78,24 @@ describe('ShowHashService', () => {
 
     expect(hashData.nextPlayer).toBe('Tester');
   });
+
+  it('should be able to player 2 like player init', async () => {
+    const hash = await fakeHashRepository.create({
+      player_1: 'Tester',
+    });
+
+    await fakeHashRepository.save({
+      ...hash,
+      player_2: 'Tester 2',
+      numMatches: 1,
+    });
+
+    const hashUpdated = await showHashService.execute({
+      hash_id: String(hash.id),
+      player: 'Tests',
+    });
+
+    expect(hashUpdated.playerInit).toBe('Tester 2');
+    expect(hashUpdated.nextPlayer).toBe(null);
+  });
 });

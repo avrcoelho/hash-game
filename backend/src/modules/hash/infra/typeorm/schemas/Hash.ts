@@ -26,10 +26,13 @@ class Hash {
   }> = [];
 
   @Column()
-  winner: string;
+  winner: string | null;
 
   @Column()
-  winningMode: number[];
+  numMatches: number = 0;
+
+  @Column()
+  winningMode: number[] | null;
 
   @CreateDateColumn()
   created_at: Date;

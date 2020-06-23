@@ -13,17 +13,9 @@ class MoveController {
 
     const hash = await moveService.execute({ id, player, position });
 
-    let nextPlayer = hash.player_1;
+    request.io.in(id).emit('hashUpdated', hash);
 
-    if (player === hash.player_1) {
-      nextPlayer = hash.player_2;
-    }
-
-    request.io
-      .in(id)
-      .emit('hashUpdated', { ...hash, playerInit: null, nextPlayer });
-
-    return response.json({ ...hash, playerInit: null, nextPlayer });
+    return response.json(hash);
   }
 }
 
