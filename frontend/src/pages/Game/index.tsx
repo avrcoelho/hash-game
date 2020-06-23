@@ -108,21 +108,25 @@ const Game: React.FC = () => {
   }, [hash]);
 
   if (!hash) {
-    return <Loader />;
+    return <Loader testID="loader" />;
   }
 
   return (
     <Container>
       <Header>
-        <Player winner={hash?.winner === hash.player_1}>{hash.player_1}</Player>
+        <Player winner={hash?.winner === hash.player_1} testID="player1">
+          {hash.player_1}
+        </Player>
         {!hash.winningMode && (
-          <Turn>
+          <Turn testID="turn">
             {hash.playerInit === hash.you || hash.nextPlayer === hash.you
               ? 'Sua vez'
               : `Vez de ${opponent}`}
           </Turn>
         )}
-        <Player winner={hash?.winner === hash.player_2}>{hash.player_2}</Player>
+        <Player winner={hash?.winner === hash.player_2} testID="player2">
+          {hash.player_2}
+        </Player>
       </Header>
       <GameList
         numColumns={3}
@@ -136,6 +140,7 @@ const Game: React.FC = () => {
               !!hash.winningMode
             }
             positionWinner={!!item.positionWinner}
+            testID="item-game"
           >
             {String(item.type || '')}
           </ItemGame>
