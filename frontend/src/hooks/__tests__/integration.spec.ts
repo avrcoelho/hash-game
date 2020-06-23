@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import { useIntegration, IntegrationProvider } from '../integration';
-import { HashData } from '../integration';
+import { HashData } from '../types';
 
 const apiMock = new MockAdapter(api);
 const mockedHistoryPush = jest.fn();

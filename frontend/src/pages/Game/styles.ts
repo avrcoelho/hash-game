@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
 
-import { GameData } from '../../hooks/integration';
+import { GameData } from '../../hooks/types';
 
 interface PlayerProps {
   winner: boolean;
@@ -32,6 +32,25 @@ export const Player = styled.Text<PlayerProps>`
 export const Turn = styled.Text`
   color: #efefef;
   font-size: 16px;
+`;
+
+export const ButtonPlayAgain = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})`
+  background-color: transparent;
+  height: 32px;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  border-width: 1px;
+  border-color: #efefef;
+`;
+
+export const ButtonPlayAgainText = styled.Text`
+  color: #efefef;
+  font-size: 14px;
+  line-height: 0;
 `;
 
 export const GameList = styled(FlatList as new () => FlatList<GameData>)`

@@ -2,10 +2,20 @@ import React, { useEffect, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import socketio from 'socket.io-client';
 
-import { useIntegration, GameData, HashData } from '../../hooks/integration';
+import { GameData, HashData } from '../../hooks/types';
+import { useIntegration } from '../../hooks/integration';
 import ItemGame from '../../components/ItemGame';
 
-import { Container, Header, Player, Turn, GameList, Loader } from './styles';
+import {
+  Container,
+  Header,
+  Player,
+  ButtonPlayAgain,
+  ButtonPlayAgainText,
+  Turn,
+  GameList,
+  Loader,
+} from './styles';
 
 interface Params {
   id: string;
@@ -42,7 +52,13 @@ const positions: GameData[] = [
 ];
 
 const Game: React.FC = () => {
-  const { showGame, moveGame, updateData, hash } = useIntegration();
+  const {
+    showGame,
+    moveGame,
+    updateData,
+    playAgainGame,
+    hash,
+  } = useIntegration();
   const { id } = useParams<Params>();
 
   useEffect(() => {
@@ -71,6 +87,10 @@ const Game: React.FC = () => {
     },
     [id, moveGame],
   );
+
+  const handlePlayAgain = useCallback(async () => {
+    await playAgainGame(id);
+  }, [id, playAgainGame]);
 
   const positionGame = useMemo(() => {
     if (hash) {
@@ -117,7 +137,11 @@ const Game: React.FC = () => {
         <Player winner={hash?.winner === hash.player_1} testID="player1">
           {hash.player_1}
         </Player>
-        {!hash.winningMode && (
+        {hash.winningMode ? (
+          <ButtonPlayAgain onPress={handlePlayAgain}>
+            <ButtonPlayAgainText>Jogar novamente</ButtonPlayAgainText>
+          </ButtonPlayAgain>
+        ) : (
           <Turn testID="turn">
             {hash.playerInit === hash.you || hash.nextPlayer === hash.you
               ? 'Sua vez'

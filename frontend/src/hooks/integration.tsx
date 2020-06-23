@@ -9,53 +9,14 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
 import api from '../services/api';
+import {
+  IntegrationContextData,
+  IntegrationState,
+  HashData,
+  ResponseInitGameData,
+  MoveGameRequest,
+} from './types';
 
-export interface GameData {
-  player?: string;
-  position: number;
-  type?: 'x' | 'o';
-  positionWinner?: boolean;
-}
-
-export interface HashData {
-  id: string;
-  player_1: string;
-  player_2: string;
-  nextPlayer: null | string;
-  playerInit: null | string;
-  you: string;
-  game: GameData[];
-  winningMode?: number[];
-  winner?: string;
-}
-
-interface IntegrationState {
-  token: string;
-  hash: HashData;
-  loading: boolean;
-}
-
-interface ResponseInitGameData {
-  token: string;
-  hash: HashData;
-}
-
-interface MoveGameRequest {
-  id: string;
-  position: number;
-}
-
-interface IntegrationContextData {
-  hash: HashData;
-  loading: boolean;
-  initGame(data: Pick<HashData, 'player_1'>): Promise<void>;
-  insertPlay2(data: Pick<HashData, 'player_2' | 'id'>): Promise<void>;
-  showGame(id: string): Promise<void>;
-  moveGame(data: MoveGameRequest): Promise<void>;
-  updateData(data: HashData): void;
-}
-
-// as IntegrationContext)
 const IntegrationContext = createContext<IntegrationContextData>(
   {} as IntegrationContextData,
 );
@@ -140,8 +101,6 @@ export const IntegrationProvider: React.FC = ({ children }) => {
 
         setData(state => ({ ...state, hash }));
       } catch (error) {
-        setData(state => ({ ...state }));
-
         toast.error(error.response.data.message);
 
         history.push('/');
@@ -158,8 +117,18 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     try {
       await api.post<HashData>(`move/${id}`, { position });
     } catch (error) {
-      setData(state => ({ ...state }));
+      toast.error(error.response.data.message);
+    } finally {
+      setData(state => ({ ...state, loading: false }));
+    }
+  }, []);
 
+  const playAgainGame = useCallback(async (id: string) => {
+    setData(state => ({ ...state, loading: true }));
+
+    try {
+      await api.put<HashData>(`hash/${id}`);
+    } catch (error) {
       toast.error(error.response.data.message);
     } finally {
       setData(state => ({ ...state, loading: false }));
@@ -180,6 +149,7 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         showGame,
         moveGame,
         updateData,
+        playAgainGame,
       }}
     >
       {children}
