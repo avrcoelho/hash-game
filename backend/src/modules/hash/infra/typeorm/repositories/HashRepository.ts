@@ -29,10 +29,6 @@ class HashRespository implements IHashRepository {
   public async save(hash: Hash): Promise<Hash> {
     return this.ormRepository.save(hash);
   }
-
-  public async delete(id: string): Promise<void> {
-    await this.ormRepository.delete(id);
-  }
 }
 
 export default HashRespository;

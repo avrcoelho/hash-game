@@ -81,6 +81,8 @@ const Game: React.FC = () => {
     socket.on('closeGame', () => {
       socket.disconnect();
 
+      toast.error('Adiversario saiu do jogo');
+
       history.push('/');
     });
   }, [updateData, id, history]);
@@ -94,12 +96,12 @@ const Game: React.FC = () => {
   }, [id, showGame]);
 
   useEffect(() => {
-    if (hash && !hash.player_2) {
+    if (hash && hash.id && !hash.player_2) {
       toast.error('Sem adiversario');
 
       history.push('/');
     }
-  }, [hash]);
+  }, [hash, history]);
 
   const handleMove = useCallback(
     async (position: number) => {

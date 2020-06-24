@@ -137,7 +137,7 @@ export const IntegrationProvider: React.FC = ({ children }) => {
 
   const closeGame = useCallback(async (id: string) => {
     try {
-      await api.delete(`hash/${id}`);
+      await api.patch(`hash/close/${id}`);
     } catch (error) {
       toast.error('Houve um erro ao sair do jogo');
     }

@@ -290,7 +290,7 @@ describe('Integration hook', () => {
   });
 
   it('should ble able to close game', async () => {
-    apiMock.onDelete(`hash/123`).reply(202);
+    apiMock.onPatch(`hash/close/123`).reply(202);
 
     const { result } = renderHook(() => useIntegration(), {
       wrapper: IntegrationProvider,
@@ -306,7 +306,7 @@ describe('Integration hook', () => {
   });
 
   it('should ble able to error when close game', async () => {
-    apiMock.onDelete(`hash/123`).reply(400);
+    apiMock.onPatch(`hash/close/123`).reply(400);
 
     const spyToast = jest.spyOn(toast, 'error');
 

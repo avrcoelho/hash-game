@@ -18,7 +18,7 @@ class Hash {
   @Column()
   player_2: string;
 
-  @Column()
+  @Column({ default: [] })
   game: Array<{
     player: string;
     position: number;
@@ -28,11 +28,14 @@ class Hash {
   @Column()
   winner: string | null;
 
-  @Column()
+  @Column({ default: 0 })
   numMatches: number = 0;
 
   @Column()
   winningMode: number[] | null;
+
+  @Column({ default: 0 })
+  closed: boolean = false;
 
   @CreateDateColumn()
   created_at: Date;

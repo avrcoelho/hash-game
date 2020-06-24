@@ -33,12 +33,6 @@ class FakeHashRepository implements IHashRepository {
 
     return hash;
   }
-
-  public async delete(id: string): Promise<void> {
-    this.hashs = this.hashs.filter(
-      findHash => findHash.id !== new ObjectID(id),
-    );
-  }
 }
 
 export default FakeHashRepository;
