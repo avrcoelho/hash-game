@@ -8,6 +8,8 @@ const mockedShowGame = jest.fn();
 const mockedMoveGame = jest.fn();
 const mockedUpdateData = jest.fn();
 const mockedHistoryPush = jest.fn();
+const mockedCloseGame = jest.fn();
+const mockedPlayAgain = jest.fn();
 const mockedHash = jest.fn().mockReturnValue(undefined);
 
 jest.mock('react-router-dom', () => {
@@ -27,6 +29,8 @@ jest.mock('../../../hooks/integration', () => {
       showGame: mockedShowGame,
       moveGame: mockedMoveGame,
       updateData: mockedUpdateData,
+      playAgainGame: mockedPlayAgain,
+      closeGame: mockedCloseGame,
       hash: mockedHash(),
     }),
   };

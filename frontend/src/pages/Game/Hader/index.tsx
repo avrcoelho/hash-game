@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { useIntegration } from '../../../hooks/integration';
+import { HashData } from '../../../hooks/types';
 
 import {
   Container,
@@ -15,11 +15,12 @@ import {
 
 interface Props {
   id: string;
+  playAgainGame(id: string): Promise<void>;
+  closeGame(id: string): Promise<void>;
+  hash: HashData;
 }
 
-const Header: React.FC<Props> = ({ id }) => {
-  const { playAgainGame, closeGame, hash } = useIntegration();
-
+const Header: React.FC<Props> = ({ id, playAgainGame, closeGame, hash }) => {
   const handlePlayAgain = useCallback(async () => {
     await playAgainGame(id);
   }, [id, playAgainGame]);

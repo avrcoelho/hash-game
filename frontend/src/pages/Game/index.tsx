@@ -45,7 +45,14 @@ const positions: GameData[] = [
 ];
 
 const Game: React.FC = () => {
-  const { showGame, moveGame, updateData, hash } = useIntegration();
+  const {
+    showGame,
+    moveGame,
+    updateData,
+    playAgainGame,
+    closeGame,
+    hash,
+  } = useIntegration();
   const { id } = useParams<Params>();
   const history = useHistory();
 
@@ -122,7 +129,12 @@ const Game: React.FC = () => {
 
   return (
     <Container>
-      <Header id={id} />
+      <Header
+        id={id}
+        playAgainGame={playAgainGame}
+        closeGame={closeGame}
+        hash={hash}
+      />
       <GameList
         numColumns={3}
         data={positionGame}
