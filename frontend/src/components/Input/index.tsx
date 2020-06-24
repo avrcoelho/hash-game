@@ -83,7 +83,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
           keyboardAppearance="dark"
           defaultValue={defaultValue}
           placeholderTextColor="#666360"
-          maxLength={20}
+          maxLength={10}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onChangeText={value => {

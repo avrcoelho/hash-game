@@ -21,7 +21,11 @@ class HashRespository implements IHashRepository {
   }
 
   public async findById(id: string): Promise<Hash | undefined> {
-    const hash = await this.ormRepository.findOne(id);
+    const hash = await this.ormRepository.findOne(id, {
+      where: {
+        closed: false,
+      },
+    });
 
     return hash;
   }

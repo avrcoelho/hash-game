@@ -11,7 +11,12 @@ class FakeHashRepository implements IHashRepository {
   public async create({ player_1 }: ICreateHashDTO): Promise<Hash> {
     const hash = new Hash();
 
-    Object.assign(hash, { id: new ObjectID(), player_1, game: [] });
+    Object.assign(hash, {
+      id: new ObjectID(),
+      player_1,
+      closed: false,
+      game: [],
+    });
 
     this.hashs.push(hash);
 

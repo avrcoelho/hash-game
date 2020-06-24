@@ -58,7 +58,7 @@ describe('closeGame', () => {
     });
 
     const { body, status } = await request(app.server)
-      .put(`/hash/close/${hash.id.substr(1)}1`)
+      .patch(`/hash/close/${hash.id.substr(1)}1`)
       .set('Authorization', `bearer ${token}`);
 
     expect(status).toBe(400);

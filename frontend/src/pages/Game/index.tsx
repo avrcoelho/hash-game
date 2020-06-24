@@ -6,20 +6,9 @@ import { toast } from 'react-toastify';
 import { GameData, HashData } from '../../hooks/types';
 import { useIntegration } from '../../hooks/integration';
 import ItemGame from '../../components/ItemGame';
+import Header from './Hader';
 
-import {
-  Container,
-  Header,
-  Player,
-  ButtonsContainer,
-  ButtonPlayAgain,
-  ButtonPlayAgainText,
-  ButtonClose,
-  ButtonCloseText,
-  Turn,
-  GameList,
-  Loader,
-} from './styles';
+import { Container, GameList, Loader } from './styles';
 
 interface Params {
   id: string;
@@ -56,14 +45,7 @@ const positions: GameData[] = [
 ];
 
 const Game: React.FC = () => {
-  const {
-    showGame,
-    moveGame,
-    updateData,
-    playAgainGame,
-    closeGame,
-    hash,
-  } = useIntegration();
+  const { showGame, moveGame, updateData, hash } = useIntegration();
   const { id } = useParams<Params>();
   const history = useHistory();
 
@@ -110,14 +92,6 @@ const Game: React.FC = () => {
     [id, moveGame],
   );
 
-  const handlePlayAgain = useCallback(async () => {
-    await playAgainGame(id);
-  }, [id, playAgainGame]);
-
-  const handleCloseGame = useCallback(async () => {
-    await closeGame(id);
-  }, [id, closeGame]);
-
   const positionGame = useMemo(() => {
     if (hash) {
       return positions.map(position => {
@@ -142,47 +116,13 @@ const Game: React.FC = () => {
     return positions;
   }, [hash]);
 
-  const opponent = useMemo(() => {
-    if (hash && hash.you !== hash.player_1) {
-      return hash.player_1;
-    }
-    if (hash && hash.you !== hash.player_2) {
-      return hash.player_2;
-    }
-
-    return '';
-  }, [hash]);
-
   if (!hash) {
     return <Loader testID="loader" />;
   }
 
   return (
     <Container>
-      <Header>
-        <Player winner={hash?.winner === hash.player_1} testID="player1">
-          {hash.player_1}
-        </Player>
-        {hash.winningMode ? (
-          <ButtonsContainer>
-            <ButtonPlayAgain onPress={handlePlayAgain}>
-              <ButtonPlayAgainText>Jogar novamente</ButtonPlayAgainText>
-            </ButtonPlayAgain>
-            <ButtonClose onPress={handleCloseGame}>
-              <ButtonCloseText>Sair</ButtonCloseText>
-            </ButtonClose>
-          </ButtonsContainer>
-        ) : (
-          <Turn testID="turn">
-            {hash.playerInit === hash.you || hash.nextPlayer === hash.you
-              ? 'Sua vez'
-              : `Vez de ${opponent}`}
-          </Turn>
-        )}
-        <Player winner={hash?.winner === hash.player_2} testID="player2">
-          {hash.player_2}
-        </Player>
-      </Header>
+      <Header id={id} />
       <GameList
         numColumns={3}
         data={positionGame}

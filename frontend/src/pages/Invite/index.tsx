@@ -5,6 +5,7 @@ import { FiCopy } from 'react-icons/fi';
 import socketio from 'socket.io-client';
 
 import { useIntegration } from '../../hooks/integration';
+import { HashData } from '../../hooks/types';
 
 import {
   Container,
@@ -19,13 +20,9 @@ interface Params {
   id: string;
 }
 
-interface GameData {
-  player_2: string;
-}
-
 const Invite: React.FC = () => {
   const { id } = useParams<Params>();
-  const { showGame } = useIntegration();
+  const { showGame, updateData } = useIntegration();
   const history = useHistory();
   const [, setString] = useClipboard();
 
@@ -48,12 +45,12 @@ const Invite: React.FC = () => {
 
     socket.emit('connectRoom', id);
 
-    socket.on('player2Entered', (gameData: GameData) => {
-      if (gameData.player_2) {
-        history.push(`/game/${id}`);
-      }
+    socket.on('player2Entered', (gameData: HashData) => {
+      updateData(gameData);
+
+      history.push(`/game/${id}`);
     });
-  }, [history, id]);
+  }, [history, id, updateData]);
 
   return (
     <Container>
