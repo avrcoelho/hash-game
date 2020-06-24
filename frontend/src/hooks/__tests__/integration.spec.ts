@@ -91,6 +91,7 @@ describe('Integration hook', () => {
       hash: {
         game: [],
         player_1: 'johndoe',
+        player_2: 'johntree',
         id: '123',
       },
       token: '123',
@@ -286,5 +287,82 @@ describe('Integration hook', () => {
     });
 
     expect(result.current.hash).toEqual(data);
+  });
+
+  it('should ble able to close game', async () => {
+    apiMock.onDelete(`hash/123`).reply(202);
+
+    const { result } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.closeGame('123');
+      result.current.deleteData();
+    });
+
+    expect(sessionStorage.clear).toHaveBeenCalled();
+    expect(result.current.hash).not.toBeDefined();
+  });
+
+  it('should ble able to error when close game', async () => {
+    apiMock.onDelete(`hash/123`).reply(400);
+
+    const spyToast = jest.spyOn(toast, 'error');
+
+    const { result } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.closeGame('123');
+    });
+
+    expect(spyToast).toHaveBeenCalled();
+  });
+
+  it('should ble able to play agian game', async () => {
+    const data = {
+      game: [],
+      player_1: 'johndoe',
+      player_2: 'johntree',
+      id: '123',
+      nextPlayer: 'johntree',
+      playerInit: null,
+      you: 'johndoe',
+    } as HashData;
+
+    apiMock.onPut(`hash/123`).reply(200, data);
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.playAgainGame('123');
+      result.current.updateData(data);
+    });
+
+    await waitForNextUpdate();
+
+    expect(result.current.hash.game).toEqual([]);
+  });
+
+  it('should ble able to error play agian game', async () => {
+    apiMock.onPut(`hash/123`).reply(400);
+
+    const spyToast = jest.spyOn(toast, 'error');
+
+    const { result, waitForNextUpdate } = renderHook(() => useIntegration(), {
+      wrapper: IntegrationProvider,
+    });
+
+    act(() => {
+      result.current.playAgainGame('123');
+    });
+
+    await waitForNextUpdate();
+
+    expect(spyToast).toHaveBeenCalled();
   });
 });

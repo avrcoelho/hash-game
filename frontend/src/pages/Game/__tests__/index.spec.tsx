@@ -7,12 +7,16 @@ import Game from '../';
 const mockedShowGame = jest.fn();
 const mockedMoveGame = jest.fn();
 const mockedUpdateData = jest.fn();
+const mockedHistoryPush = jest.fn();
 const mockedHash = jest.fn().mockReturnValue(undefined);
 
 jest.mock('react-router-dom', () => {
   return {
     useParams: () => ({
       id: '123',
+    }),
+    useHistory: () => ({
+      push: mockedHistoryPush,
     }),
   };
 });

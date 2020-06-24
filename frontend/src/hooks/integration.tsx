@@ -135,8 +135,22 @@ export const IntegrationProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+  const closeGame = useCallback(async (id: string) => {
+    try {
+      await api.delete(`hash/${id}`);
+    } catch (error) {
+      toast.error('Houve um erro ao sair do jogo');
+    }
+  }, []);
+
   const updateData = useCallback((hash: HashData) => {
     setData(state => ({ ...state, hash: { ...state.hash, ...hash } }));
+  }, []);
+
+  const deleteData = useCallback(() => {
+    setData({ loading: false } as IntegrationState);
+
+    sessionStorage.clear();
   }, []);
 
   return (
@@ -150,6 +164,8 @@ export const IntegrationProvider: React.FC = ({ children }) => {
         moveGame,
         updateData,
         playAgainGame,
+        closeGame,
+        deleteData,
       }}
     >
       {children}

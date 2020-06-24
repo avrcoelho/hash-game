@@ -34,6 +34,10 @@ export const Turn = styled.Text`
   font-size: 16px;
 `;
 
+export const ButtonsContainer = styled.View`
+  flex-direction: row;
+`;
+
 export const ButtonPlayAgain = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
@@ -48,6 +52,24 @@ export const ButtonPlayAgain = styled.TouchableOpacity.attrs({
 `;
 
 export const ButtonPlayAgainText = styled.Text`
+  color: #efefef;
+  font-size: 14px;
+  line-height: 0;
+`;
+
+export const ButtonClose = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})`
+  background-color: #c53030;
+  height: 32px;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  margin-left: 8px;
+`;
+
+export const ButtonCloseText = styled.Text`
   color: #efefef;
   font-size: 14px;
   line-height: 0;

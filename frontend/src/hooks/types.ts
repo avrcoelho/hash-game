@@ -42,4 +42,6 @@ export interface IntegrationContextData {
   moveGame(data: MoveGameRequest): Promise<void>;
   updateData(data: HashData): void;
   playAgainGame(id: string): Promise<void>;
+  closeGame(id: string): Promise<void>;
+  deleteData(): void;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import socketio from 'socket.io-client';
+import { toast } from 'react-toastify';
 
 import { GameData, HashData } from '../../hooks/types';
 import { useIntegration } from '../../hooks/integration';
@@ -10,8 +11,11 @@ import {
   Container,
   Header,
   Player,
+  ButtonsContainer,
   ButtonPlayAgain,
   ButtonPlayAgainText,
+  ButtonClose,
+  ButtonCloseText,
   Turn,
   GameList,
   Loader,
@@ -57,9 +61,11 @@ const Game: React.FC = () => {
     moveGame,
     updateData,
     playAgainGame,
+    closeGame,
     hash,
   } = useIntegration();
   const { id } = useParams<Params>();
+  const history = useHistory();
 
   useEffect(() => {
     const socket = socketio(
@@ -71,7 +77,13 @@ const Game: React.FC = () => {
     socket.on('hashUpdated', (gameData: HashData) => {
       updateData(gameData);
     });
-  }, [updateData, id]);
+
+    socket.on('closeGame', () => {
+      socket.disconnect();
+
+      history.push('/');
+    });
+  }, [updateData, id, history]);
 
   useEffect(() => {
     async function getGame() {
@@ -80,6 +92,14 @@ const Game: React.FC = () => {
 
     getGame();
   }, [id, showGame]);
+
+  useEffect(() => {
+    if (hash && !hash.player_2) {
+      toast.error('Sem adiversario');
+
+      history.push('/');
+    }
+  }, [hash]);
 
   const handleMove = useCallback(
     async (position: number) => {
@@ -91,6 +111,10 @@ const Game: React.FC = () => {
   const handlePlayAgain = useCallback(async () => {
     await playAgainGame(id);
   }, [id, playAgainGame]);
+
+  const handleCloseGame = useCallback(async () => {
+    await closeGame(id);
+  }, [id, closeGame]);
 
   const positionGame = useMemo(() => {
     if (hash) {
@@ -138,9 +162,14 @@ const Game: React.FC = () => {
           {hash.player_1}
         </Player>
         {hash.winningMode ? (
-          <ButtonPlayAgain onPress={handlePlayAgain}>
-            <ButtonPlayAgainText>Jogar novamente</ButtonPlayAgainText>
-          </ButtonPlayAgain>
+          <ButtonsContainer>
+            <ButtonPlayAgain onPress={handlePlayAgain}>
+              <ButtonPlayAgainText>Jogar novamente</ButtonPlayAgainText>
+            </ButtonPlayAgain>
+            <ButtonClose onPress={handleCloseGame}>
+              <ButtonCloseText>Sair</ButtonCloseText>
+            </ButtonClose>
+          </ButtonsContainer>
         ) : (
           <Turn testID="turn">
             {hash.playerInit === hash.you || hash.nextPlayer === hash.you
