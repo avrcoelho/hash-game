@@ -12,7 +12,7 @@ interface IRequest {
 
 interface IResponse extends Hash {
   playerInit: null;
-  nextPlayer: string;
+  nextPlayer: string | null;
 }
 
 @injectable()
@@ -72,7 +72,8 @@ class MoveService {
 
     const ordedGame = filteredGame.sort((a, b) => a.position - b.position);
 
-    let isWinner;
+    let isWinner: number[] | null = null;
+    let nextPlayer: string | null = null;
 
     winningMoves.every(move => {
       const [move1, move2, move3] = move;
@@ -97,15 +98,15 @@ class MoveService {
       hash.winner = player;
       hash.winningMode = isWinner;
       hash.numMatches += 1;
+    } else {
+      nextPlayer = hash.player_1;
+
+      if (player === hash.player_1) {
+        nextPlayer = hash.player_2;
+      }
     }
 
     hash = await this.hahsRepository.save(hash);
-
-    let nextPlayer = hash.player_1;
-
-    if (player === hash.player_1) {
-      nextPlayer = hash.player_2;
-    }
 
     return { ...hash, playerInit: null, nextPlayer };
   }
