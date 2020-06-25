@@ -3,6 +3,7 @@ import { useClipboard } from '@react-native-community/hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { FiCopy } from 'react-icons/fi';
 import socketio from 'socket.io-client';
+import { useMediaQuery } from 'react-responsive';
 
 import { useIntegration } from '../../hooks/integration';
 import { HashData } from '../../hooks/types';
@@ -11,6 +12,7 @@ import {
   Container,
   LogoText,
   Info,
+  InviteInfo,
   LinkContainer,
   Link,
   CopyButton,
@@ -25,6 +27,9 @@ const Invite: React.FC = () => {
   const { showGame, updateData } = useIntegration();
   const history = useHistory();
   const [, setString] = useClipboard();
+  const isMobile = useMediaQuery({
+    query: '(max-device-width: 470px)',
+  });
 
   useEffect(() => {
     async function getGame() {
@@ -56,12 +61,14 @@ const Invite: React.FC = () => {
     <Container>
       <LogoText>Jogo da velha</LogoText>
       <Info>Envie o link para alguem e aguarde a sua entreada</Info>
-      <LinkContainer>
-        <Link>{`${process.env.REACT_APP_URL}/player2/${id}`}</Link>
+      <InviteInfo>
+        <LinkContainer isMobile={isMobile}>
+          <Link>{`${process.env.REACT_APP_URL}/player2/${id}`}</Link>
+        </LinkContainer>
         <CopyButton onPress={copyToClipboard} testID="button-copy">
           <FiCopy size={15} color="#efefef" />
         </CopyButton>
-      </LinkContainer>
+      </InviteInfo>
     </Container>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import socketio from 'socket.io-client';
 import { toast } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive';
 
 import { GameData, HashData } from '../../hooks/types';
 import { useIntegration } from '../../hooks/integration';
@@ -122,6 +123,14 @@ const Game: React.FC = () => {
 
     return positions;
   }, [hash]);
+
+  const dimensions = useMemo(() => {
+    const isMobile = useMediaQuery({
+      query: '(max-device-width: 470px)',
+    });
+
+    return isMobile;
+  }, []);
 
   if (!hash) {
     return <Loader testID="loader" />;
