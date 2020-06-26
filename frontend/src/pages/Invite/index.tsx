@@ -24,7 +24,7 @@ interface Params {
 
 const Invite: React.FC = () => {
   const { id } = useParams<Params>();
-  const { showGame, updateData } = useIntegration();
+  const { showGame, updateData, hash } = useIntegration();
   const history = useHistory();
   const [, setString] = useClipboard();
   const isMobile = useMediaQuery({
@@ -39,6 +39,12 @@ const Invite: React.FC = () => {
     getGame();
   }, [id, showGame]);
 
+  useEffect(() => {
+    if (hash && hash.player_2) {
+      history.push(`/game/${id}`);
+    }
+  }, [hash, history]);
+
   const copyToClipboard = useCallback(() => {
     setString(`${process.env.REACT_APP_URL}/player2/${id}`);
   }, [id, setString]);
@@ -52,8 +58,6 @@ const Invite: React.FC = () => {
 
     socket.on('player2Entered', (gameData: HashData) => {
       updateData(gameData);
-
-      history.push(`/game/${id}`);
     });
   }, [history, id, updateData]);
 
