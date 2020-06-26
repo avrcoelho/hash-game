@@ -18,7 +18,6 @@ class App {
   public server: http.Server;
   public app: Application;
   private io: Server;
-  private connectedUsers: { [index: string]: any } = {};
 
   public constructor() {
     createConnection();

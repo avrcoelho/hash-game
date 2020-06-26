@@ -36,7 +36,7 @@ export const LinkContainer = styled.View<LinkContainerProps>`
   align-items: center;
   width: ${props => (props.isMobile ? '250px' : 'auto')};
   height: 38px;
-  overflow: auto;
+  overflow: ${props => (props.isMobile ? 'scroll' : 'hidden')};
 `;
 
 export const Link = styled.Text`

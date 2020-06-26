@@ -44,13 +44,13 @@ describe('Input', () => {
     fireEvent.focus(getByTestId(`input-${props.name}`));
 
     expect(getByTestId('input-container')).toHaveStyle({
-      borderColor: '#ffd21f',
+      borderColor: '#efefef',
     });
 
     fireEvent.blur(getByTestId(`input-${props.name}`));
 
     expect(getByTestId('input-container')).not.toHaveStyle({
-      borderColor: '#ffd21f',
+      borderColor: '#efefef',
     });
   });
 
@@ -61,14 +61,14 @@ describe('Input', () => {
     fireEvent.blur(getByTestId(`input-${props.name}`));
 
     expect(getByTestId('input-container')).toHaveStyle({
-      color: '#ffd21f',
+      color: '#efefef',
     });
 
     fireEvent.changeText(getByTestId(`input-${props.name}`), '');
     fireEvent.blur(getByTestId(`input-${props.name}`));
 
     expect(getByTestId('input-container')).not.toHaveStyle({
-      color: '#ffd21f',
+      color: '#efefef',
     });
   });
 
