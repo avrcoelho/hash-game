@@ -59,7 +59,7 @@ const Invite: React.FC = () => {
     socket.on('player2Entered', (gameData: HashData) => {
       updateData(gameData);
     });
-  }, [updateData]);
+  }, [updateData, id]);
 
   return (
     <Container>
