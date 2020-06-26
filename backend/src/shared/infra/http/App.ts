@@ -46,7 +46,7 @@ class App {
   private middlewares() {
     this.app.use(
       cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.FRONT_END_URL,
       }),
     );
     this.app.use(express.json());
