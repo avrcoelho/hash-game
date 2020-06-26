@@ -1,15 +1,26 @@
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
+
+interface ContainerProps {
+  idMobile: boolean;
+}
 
 interface PlayerProps {
   winner: boolean;
 }
 
-export const Container = styled.View`
-  width: 400px;
+export const Container = styled.View<ContainerProps>`
+  width: auto;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
   margin-top: 40px;
+
+  ${props =>
+    props.idMobile &&
+    css`
+      flex-direction: column;
+      height: 110px;
+    `}
 `;
 
 export const Player = styled.Text<PlayerProps>`
@@ -23,10 +34,12 @@ export const Player = styled.Text<PlayerProps>`
 export const Turn = styled.Text`
   color: #efefef;
   font-size: 16px;
+  margin: 0 50px;
 `;
 
 export const ButtonsContainer = styled.View`
   flex-direction: row;
+  margin: 0 50px;
 `;
 
 export const ButtonPlayAgain = styled.TouchableOpacity.attrs({

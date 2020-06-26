@@ -18,9 +18,16 @@ interface Props {
   playAgainGame(id: string): Promise<void>;
   closeGame(id: string): Promise<void>;
   hash: HashData;
+  idMobile: boolean;
 }
 
-const Header: React.FC<Props> = ({ id, playAgainGame, closeGame, hash }) => {
+const Header: React.FC<Props> = ({
+  id,
+  playAgainGame,
+  closeGame,
+  hash,
+  idMobile,
+}) => {
   const handlePlayAgain = useCallback(async () => {
     await playAgainGame(id);
   }, [id, playAgainGame]);
@@ -41,11 +48,11 @@ const Header: React.FC<Props> = ({ id, playAgainGame, closeGame, hash }) => {
   }, [hash]);
 
   return (
-    <Container>
+    <Container idMobile={idMobile}>
       <Player winner={hash?.winner === hash.player_1} testID="player1">
         {hash.player_1}
       </Player>
-      {hash.winningMode ? (
+      {hash.winningMode || hash.game.length === 9 ? (
         <ButtonsContainer testID="buttons">
           <ButtonPlayAgain onPress={handlePlayAgain}>
             <ButtonPlayAgainText>Jogar novamente</ButtonPlayAgainText>

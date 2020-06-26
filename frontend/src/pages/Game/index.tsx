@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { GameData, HashData } from '../../hooks/types';
 import { useIntegration } from '../../hooks/integration';
-import ItemGame from '../../components/ItemGame';
+import ItemGame from './ItemGame';
 import Header from './Hader';
 
 import { Container, GameList, Loader } from './styles';
@@ -56,6 +56,12 @@ const Game: React.FC = () => {
   } = useIntegration();
   const { id } = useParams<Params>();
   const history = useHistory();
+  const isMobileMedium = useMediaQuery({
+    query: '(max-device-width: 670px)',
+  });
+  const isMobileSmall = useMediaQuery({
+    query: '(max-device-width: 520px)',
+  });
 
   useEffect(() => {
     const socket = socketio(
@@ -71,7 +77,7 @@ const Game: React.FC = () => {
     socket.on('closeGame', () => {
       socket.disconnect();
 
-      toast.error('Adiversario saiu do jogo');
+      toast.error('Jogo finalizado');
 
       history.push('/');
     });
@@ -100,7 +106,7 @@ const Game: React.FC = () => {
     [id, moveGame],
   );
 
-  const positionGame = useMemo(() => {
+  const positionGame = useMemo<GameData[]>(() => {
     if (hash) {
       return positions.map(position => {
         let findPosition = hash.game.find(
@@ -124,13 +130,17 @@ const Game: React.FC = () => {
     return positions;
   }, [hash]);
 
-  const dimensions = useMemo(() => {
-    const isMobile = useMediaQuery({
-      query: '(max-device-width: 470px)',
-    });
+  const disabledButton = useMemo<boolean>(() => {
+    if (hash) {
+      return (
+        (hash.playerInit !== hash.you && hash.nextPlayer !== hash.you) ||
+        !!hash.winningMode ||
+        hash.game.length === 9
+      );
+    }
 
-    return isMobile;
-  }, []);
+    return false;
+  }, [hash]);
 
   if (!hash) {
     return <Loader testID="loader" />;
@@ -143,6 +153,7 @@ const Game: React.FC = () => {
         playAgainGame={playAgainGame}
         closeGame={closeGame}
         hash={hash}
+        idMobile={isMobileMedium}
       />
       <GameList
         numColumns={3}
@@ -151,12 +162,11 @@ const Game: React.FC = () => {
         renderItem={({ item }) => (
           <ItemGame
             onPress={() => handleMove(item.position)}
-            disabled={
-              (hash.playerInit !== hash.you && hash.nextPlayer !== hash.you) ||
-              !!hash.winningMode
-            }
+            disabled={disabledButton}
             positionWinner={!!item.positionWinner}
             testID="item-game"
+            isMobileMedium={isMobileMedium}
+            isMobileSmall={isMobileSmall}
           >
             {String(item.type || '')}
           </ItemGame>
