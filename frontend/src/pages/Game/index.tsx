@@ -53,6 +53,7 @@ const Game: React.FC = () => {
     playAgainGame,
     closeGame,
     hash,
+    loadingMove,
   } = useIntegration();
   const { id } = useParams<Params>();
   const history = useHistory();
@@ -133,6 +134,7 @@ const Game: React.FC = () => {
   const disabledButton = useMemo<boolean>(() => {
     if (hash) {
       return (
+        loadingMove ||
         (hash.playerInit !== hash.you && hash.nextPlayer !== hash.you) ||
         !!hash.winningMode ||
         hash.game.length === 9
@@ -140,7 +142,7 @@ const Game: React.FC = () => {
     }
 
     return false;
-  }, [hash]);
+  }, [hash, loadingMove]);
 
   if (!hash) {
     return <Loader testID="loader" />;
@@ -159,6 +161,7 @@ const Game: React.FC = () => {
         numColumns={3}
         data={positionGame}
         keyExtractor={item => String(item.position)}
+        scrollEnabled={false}
         renderItem={({ item }) => (
           <ItemGame
             onPress={() => handleMove(item.position)}

@@ -112,14 +112,14 @@ export const IntegrationProvider: React.FC = ({ children }) => {
   );
 
   const moveGame = useCallback(async ({ id, position }: MoveGameRequest) => {
-    setData(state => ({ ...state, loading: true }));
+    setData(state => ({ ...state, loading: true, loadingMove: true }));
 
     try {
       await api.post<HashData>(`move/${id}`, { position });
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      setData(state => ({ ...state, loading: false }));
+      setData(state => ({ ...state, loading: false, loadingMove: false }));
     }
   }, []);
 
@@ -158,6 +158,7 @@ export const IntegrationProvider: React.FC = ({ children }) => {
       value={{
         hash: data.hash,
         loading: data.loading,
+        loadingMove: data.loadingMove,
         initGame,
         insertPlay2,
         showGame,

@@ -32,6 +32,7 @@ jest.mock('../../../hooks/integration', () => {
       playAgainGame: mockedPlayAgain,
       closeGame: mockedCloseGame,
       hash: mockedHash(),
+      loadingMove: false,
     }),
   };
 });
