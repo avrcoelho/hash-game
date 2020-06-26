@@ -43,7 +43,7 @@ const Invite: React.FC = () => {
     if (hash && hash.player_2) {
       history.push(`/game/${id}`);
     }
-  }, [hash, history]);
+  }, [hash, history, id]);
 
   const copyToClipboard = useCallback(() => {
     setString(`${process.env.REACT_APP_URL}/player2/${id}`);
