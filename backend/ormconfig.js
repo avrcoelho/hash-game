@@ -23,6 +23,8 @@ module.exports = {
   host: process.env.TYPEORM_HOST,
   port: process.env.TYPEORM_PORT,
   database: process.env.TYPEORM_DATABASE,
+  username: process.env.TYPEORM_USER,
+  password: process.env.TYPEORM_PASSWORD,
   useUnifiedTopology: true,
   entities: [process.env.TYPEORM_ENTITIES],
 };
