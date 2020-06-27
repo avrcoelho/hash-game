@@ -21,18 +21,17 @@ const ItemGame: React.FC<Props> = ({
     switch (children) {
       case 'x':
         return (
-          <FiX size={250} color={positionWinner ? '#53c100' : '#312E38'} />
+          <FiX size={250} color={positionWinner ? '#53c100' : '#0f204e'} />
         );
       case 'o':
         return (
-          <FiCircle size={140} color={positionWinner ? '#53c100' : '#312E38'} />
+          <FiCircle size={140} color={positionWinner ? '#53c100' : '#0f204e'} />
         );
       default:
         return null;
     }
   }, [children, positionWinner]);
 
-  console.log(isMobileMedium);
   return (
     <Container
       isO={!!(children === 'o')}

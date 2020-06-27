@@ -9,7 +9,7 @@ Aplicação desenvolvida (front e back-end) com o intuito de realizar o jogo da 
 
 ## Demonstação
 
-A aplicação está hospedada no [heroku](https://www.heroku.com/). Acesse o link [https://unruffled-hermann-6fc551.netlify.com/](https://unruffled-hermann-6fc551.netlify.com/) para executa-la.
+A aplicação está hospedada no [Netlify](https://www.netlify.com/). Acesse o link [https://focused-clarke-38d320.netlify.app/](https://focused-clarke-38d320.netlify.app/) para executa-la.
 
 ## Tecnologias utilizadas
 

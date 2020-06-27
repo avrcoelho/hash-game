@@ -23,6 +23,7 @@ interface Props {
   playAgainGame(id: string): Promise<void>;
   closeGame(id: string): Promise<void>;
   hash: HashData;
+  idMobile: boolean;
 }
 
 describe('Header Game', () => {
@@ -47,6 +48,7 @@ describe('Header Game', () => {
     id: '123456',
     playAgainGame: jest.fn(),
     closeGame: jest.fn(),
+    idMobile: false,
   } as Props;
 
   it('should be able to winner and players name', async () => {

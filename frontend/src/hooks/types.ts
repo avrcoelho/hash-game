@@ -21,6 +21,7 @@ export interface IntegrationState {
   token: string;
   hash: HashData;
   loading: boolean;
+  loadingMove: boolean;
 }
 
 export interface ResponseInitGameData {
@@ -36,6 +37,7 @@ export interface MoveGameRequest {
 export interface IntegrationContextData {
   hash: HashData;
   loading: boolean;
+  loadingMove: boolean;
   initGame(data: Pick<HashData, 'player_1'>): Promise<void>;
   insertPlay2(data: Pick<HashData, 'player_2' | 'id'>): Promise<void>;
   showGame(id: string): Promise<void>;

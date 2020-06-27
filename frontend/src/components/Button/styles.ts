@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 export const Container = styled.TouchableOpacity`
   width: 100%;
   height: 60px;
-  background-color: #ffd21f;
+  background-color: #efefef;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@ export const Container = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-  color: #312e38;
+  color: #0f204e;
   font-size: 18px;
   font-weight: bold;
 `;
