@@ -162,7 +162,7 @@ const Game: React.FC = () => {
         renderItem={({ item }) => (
           <ItemGame
             onPress={() => handleMove(item.position)}
-            disabled={disabledButton}
+            disabled={disabledButton || !!item.type}
             positionWinner={!!item.positionWinner}
             testID="item-game"
             isMobileMedium={isMobileMedium}

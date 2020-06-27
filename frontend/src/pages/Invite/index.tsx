@@ -60,7 +60,7 @@ const Invite: React.FC = () => {
   return (
     <Container>
       <LogoText>Jogo da velha</LogoText>
-      <Info>Envie o link para alguem e aguarde a sua entreada</Info>
+      <Info>Envie o link para alguém e aguarde a sua entrada</Info>
       <InviteInfo>
         <LinkContainer isMobile={isMobile}>
           <Link>{`${process.env.REACT_APP_URL}/player2/${id}`}</Link>
