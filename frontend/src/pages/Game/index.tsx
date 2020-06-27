@@ -82,6 +82,13 @@ const Game: React.FC = () => {
 
       history.push('/');
     });
+
+    socket.on('error', () => {
+      window.location.reload();
+    });
+    socket.on('disconnect', () => {
+      window.location.reload();
+    });
   }, [updateData, id, history]);
 
   useEffect(() => {

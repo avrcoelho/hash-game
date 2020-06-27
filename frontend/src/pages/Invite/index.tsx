@@ -59,6 +59,13 @@ const Invite: React.FC = () => {
     socket.on('player2Entered', (gameData: HashData) => {
       updateData(gameData);
     });
+
+    socket.on('error', () => {
+      window.location.reload();
+    });
+    socket.on('disconnect', () => {
+      window.location.reload();
+    });
   }, [updateData, id]);
 
   return (

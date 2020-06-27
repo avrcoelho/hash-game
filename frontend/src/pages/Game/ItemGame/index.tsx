@@ -21,11 +21,14 @@ const ItemGame: React.FC<Props> = ({
     switch (children) {
       case 'x':
         return (
-          <FiX size={250} color={positionWinner ? '#53c100' : '#0f204e'} />
+          <FiX size="100%" color={positionWinner ? '#53c100' : '#0f204e'} />
         );
       case 'o':
         return (
-          <FiCircle size={140} color={positionWinner ? '#53c100' : '#0f204e'} />
+          <FiCircle
+            size="100%"
+            color={positionWinner ? '#53c100' : '#0f204e'}
+          />
         );
       default:
         return null;
