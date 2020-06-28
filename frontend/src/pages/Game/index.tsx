@@ -76,8 +76,6 @@ const Game: React.FC = () => {
     });
 
     socket.on('closeGame', () => {
-      socket.disconnect();
-
       toast.error('Jogo finalizado');
 
       history.push('/');
