@@ -7,7 +7,7 @@
 
 Aplicação desenvolvida (front e back-end) com o intuito de realizar o jogo da velha em modo online em tempo real entre dois jogadores.
 
-## Demonstação
+## Demonstração
 
 A aplicação está hospedada no [Netlify](https://www.netlify.com/). Acesse o link [https://focused-clarke-38d320.netlify.app/](https://focused-clarke-38d320.netlify.app/) para executa-la.
 
