@@ -6,7 +6,7 @@
     "@react-native-community/hooks": "^2.6.0",
     "@unform/core": "^2.1.0",
     "@unform/mobile": "^2.1.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
